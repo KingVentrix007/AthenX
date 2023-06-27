@@ -1,0 +1,16 @@
+CC=gcc
+AS=as
+GCCPARAMS = -m32 -nostdlib -fno-builtin -fno-exceptions -ffreestanding -fno-leading-underscore
+ASPARAMS = --32
+LDPARAMS = -melf_i386
+
+C_SOURCES = $(wildcard kernel/*.c , drivers/*.c)
+HEADERS = $(wildcard kernel/*.h , drivers/*.h)
+
+OBJ = $(C_SOURCES:.c=.o)
+
+all: os_image
+
+run: all
+	qemu
+

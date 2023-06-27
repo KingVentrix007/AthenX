@@ -1,0 +1,110 @@
+#include "../include/io.h"
+#include "../include/time.h"
+#include "../include/string.h"
+#include "../include/vga.h"
+enum {
+      cmos_address = 0x70,
+      cmos_data    = 0x71
+};
+unsigned char get_RTC_register(int reg) {
+    out_bytes(cmos_address, reg);
+    return input_bytes(cmos_data);
+}
+
+char* get_time()
+{
+    char* numbers[] = {"01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","59","60"};
+    char* times[3];
+    unsigned char second;
+    unsigned char minute;
+    unsigned char hour;
+    unsigned char day;
+    unsigned char month;
+    unsigned int year;
+    second = get_RTC_register(0x00);
+    minute = get_RTC_register(0x02);
+    hour = get_RTC_register(0x04);
+    day = get_RTC_register(0x07);
+    month = get_RTC_register(0x08);
+    year = get_RTC_register(0x09);
+    second = (second & 0x0F) + ((second / 16) * 10);
+    minute = (minute & 0x0F) + ((minute / 16) * 10);
+    hour = ( (hour & 0x0F) + (((hour & 0x70) / 16) * 10) ) | (hour & 0x80);
+    day = (day & 0x0F) + ((day / 16) * 10);
+    month = (month & 0x0F) + ((month / 16) * 10);
+    year = (year & 0x0F) + ((year / 16) * 10);
+    for (int i = 0; i < 900; i++)
+    {
+            
+              
+            if(i == hour+1)
+            {
+                hour = numbers[i];
+                print_string(numbers[i]);
+                break;
+                    
+            }
+              
+    }
+    print_string("/");
+     for (int i = 0; i < 900; i++)
+    {
+            
+              
+            if(i == minute-1)
+            {
+                minute = numbers[i];
+                print_string(numbers[i]);
+                break;
+                    
+            }
+              
+    }
+    print_string("/");
+    for (int i = 0; i < 900; i++)
+    {
+            
+              
+            if(i == second-1)
+            {
+                second = numbers[i];
+                print_string(numbers[i]);
+                break;
+                    
+            }
+              
+    }
+    
+   
+   
+    
+    
+    
+    
+
+    
+}
+
+// char second;
+//        second = get_RTC_register(0x07);
+//        second = (second & 0x0F) + ((second / 16) * 10);
+//        char *time;
+//        char *decode_time[512];
+//        time = ctos(time, second);
+//        if(second == 27)
+//        {
+//                      print_string("HEllo");
+//        }
+//        for (int i = 0; i < 256; i++)
+//        {
+//               char fake = i;
+              
+//               if(compare_string(fake,time) == 0)
+//               {
+//                     break;
+//               }
+              
+//        }
+       
+       
+//        print_string(time);
