@@ -29,31 +29,31 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.s
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.asm
 	nasm -f elf32 -o $@ $<
 
-AthenX.bin: $(SRC_DIR)/linker.ld $(OBJ_FILES1) $(OBJ_FILES2) $(OBJ_FILES3)
+HackOS.bin: $(SRC_DIR)/linker.ld $(OBJ_FILES1) $(OBJ_FILES2) $(OBJ_FILES3)
 	ld $(LDPARAMS) -T $< -o $@ $(OBJ_DIR)/*.o
 
-iso: AthenX.bin
+iso: HackOS.bin
 	make clean
 	make
 	mkdir iso
 	mkdir iso/boot
 	mkdir iso/boot/grub
-	cp AthenX.bin iso/boot/AthenX.bin
+	cp HackOS.bin iso/boot/HackOS.bin
 	echo 'set timeout=0'                      > iso/boot/grub/grub.cfg
 	echo 'set default=0'                     >> iso/boot/grub/grub.cfg
 	echo ''                                  >> iso/boot/grub/grub.cfg
-	echo 'menuentry "AthenX" {'            >> iso/boot/grub/grub.cfg
-	echo '  multiboot /boot/AthenX.bin'   >> iso/boot/grub/grub.cfg
+	echo 'menuentry "HackOS" {'            >> iso/boot/grub/grub.cfg
+	echo '  multiboot /boot/HackOS.bin'   >> iso/boot/grub/grub.cfg
 	echo '  boot'                            >> iso/boot/grub/grub.cfg
 	echo '}'                                 >> iso/boot/grub/grub.cfg
-	grub-mkrescue --output=AthenX.iso iso
+	grub-mkrescue --output=HackOS.iso iso
 	rm -rf iso
 
-install: AthenX.bin
-	sudo cp $< /boot/AthenX.bin
+install: HackOS.bin
+	sudo cp $< /boot/HackOS.bin
 
 clean:
-	rm -f *.o AthenX AthenX.iso AthenX.bin $(OBJ_DIR)/*.o
+	rm -f *.o HackOS HackOS.iso HackOS.bin $(OBJ_DIR)/*.o
 
 version+:
 	./update_version "turd"
@@ -67,4 +67,4 @@ changlog:
 	./update_changelog
 run:
 	make iso
-	qemu-system-x86_64 AthenX.iso
+	qemu-system-x86_64 HackOS.iso

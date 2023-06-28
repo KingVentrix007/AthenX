@@ -46,7 +46,7 @@ char* get_time()
             }
               
     }
-    print_string("/");
+    print_string(":");
      for (int i = 0; i < 900; i++)
     {
             
@@ -60,7 +60,7 @@ char* get_time()
             }
               
     }
-    print_string("/");
+    print_string(".");
     for (int i = 0; i < 900; i++)
     {
             
