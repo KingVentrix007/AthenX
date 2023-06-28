@@ -3,7 +3,7 @@
 
 char* read()
 {
-    char *bu = "k";
+    char bu = "k";
     out_bytes(0x1f6,0x0a0);
     out_bytes(0x1f2,1);
     out_bytes(0x1f3,1);

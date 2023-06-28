@@ -24,7 +24,7 @@ int main()
        
        //putpixel(0,100,"4");
        //delay(40);
-       char *fis;
+       char* fis;
        fis = read();
        
        
