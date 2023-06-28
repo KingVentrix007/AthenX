@@ -67,4 +67,4 @@ changlog:
 	./update_changelog
 run:
 	make iso
-	qemu-system-x86_64 HackOS.iso
+	qemu-system-x86_64 HackOS.iso -drive file=HDD.img

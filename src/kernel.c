@@ -22,15 +22,18 @@ int main()
 {
        display_init();
        
+       //putpixel(0,100,"4");
+       //delay(40);
+       char *fis;
+       fis = read();
+       
+       
        char* numbers[] = {"01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","59","60"};
        
        char *buffer[512];
        int off = 0;
        uint8_t byte;
-       int second;
-       second = get_RTC_register(0x02);
-       second = (second & 0x0F) + ((second / 16) * 10);
-       char *time;
+       
        print_string("Current time: ",COLOR_LIGHT_RED);
        get_time();
        print_string(" \nCurrent Calendar: ",COLOR_LIGHT_RED);
@@ -39,6 +42,13 @@ int main()
 
        // time = ctos(time, second);
        print_prompt(PROMPT,PROMPT_COLOR);
+       print_string("\n",default_font_color);
+       print_string(fis,COLOR_MAGENTA);
+       if(compare_string(fis,"k")==0)
+       {
+              print_string("\nREADY",COLOR_MAGENTA);
+       }
+       
        // //print_string(time);
        // for (int i = 0; i < 900; i++)
        // {
@@ -61,7 +71,7 @@ int main()
               while(byte = scan())
               {
                      
-                     char spec = shiftcode[byte];
+                     
                      
                      
                      

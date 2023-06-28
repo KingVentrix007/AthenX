@@ -1,3 +1,4 @@
+
 bits 32
 global _start
 extern kernel_early

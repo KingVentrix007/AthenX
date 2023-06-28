@@ -5,6 +5,7 @@
 #include "stddef.h"
 #include "stdarg.h"
 #define VIDEO_ADDRESS 0xb8000
+#define VIDEO_PIXEL_MEMORY 0xb0000
 #define MAX_ROWS 25
 #define MAX_COLS 80
 #define WHITE_ON_BLACK 0x0f
@@ -45,6 +46,7 @@ void print_backspace();
 void display_init();
 int cursor_flash();
 void print_prompt(char *prompt,enum vga_color color);
+void putpixel(int pos_x, int pos_y, unsigned char VGA_COLOR);
 
 
 #endif
