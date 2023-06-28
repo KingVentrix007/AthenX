@@ -4,6 +4,7 @@
 #include "../include/memory.h"
 #include "../include/string.h"
 #include "../include/time.h"
+#include "../include/def.h"
 int kernel_early()
 {
        
@@ -20,6 +21,7 @@ char *ctos(char s[2], const char c)
 int main()
 {
        display_init();
+       
        char* numbers[] = {"01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","59","60"};
        
        char *buffer[512];
@@ -29,11 +31,14 @@ int main()
        second = get_RTC_register(0x02);
        second = (second & 0x0F) + ((second / 16) * 10);
        char *time;
-       print_string("Current time: ");
+       print_string("Current time: ",COLOR_LIGHT_RED);
        get_time();
+       print_string(" \nCurrent Calendar: ",COLOR_LIGHT_RED);
+       get_year();
+       print_string("\n",default_font_color);
 
        // time = ctos(time, second);
-       print_string("\n>");
+       print_prompt(PROMPT,PROMPT_COLOR);
        // //print_string(time);
        // for (int i = 0; i < 900; i++)
        // {
@@ -73,8 +78,9 @@ int main()
                      
                      if(byte == ENTER)
                      {
-                            print_string("\n");
+                            print_string("\n",COLOR_LIGHT_RED);
                             buffer[0] = '\0';
+                            print_prompt(PROMPT,PROMPT_COLOR);
                             
                             
 
@@ -92,14 +98,16 @@ int main()
                      
                      else{
                             append(buffer,c);
-                            print_string(s);
+                            print_string(s,default_font_color);
                      }
                      
                      
                      
               }
-              
+              //int sec = get_second();
               cursor_flash();
+              update_time();
+
        }
     
 }

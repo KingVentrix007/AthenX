@@ -32,8 +32,8 @@ enum vga_color
     COLOR_WHITE = 15,
 };
 static enum vga_color default_font_color = COLOR_WHITE;
-void print_string(char *string);
-void set_char_at_video_memory(char character, int offset);
+void print_string(char *string, enum vga_color color);
+void set_char_at_video_memory(char character, int offset,enum vga_color);
 unsigned char port_byte_in(unsigned short port);
 void port_byte_out(unsigned short port, unsigned char data);
 int get_cursor();
@@ -44,6 +44,7 @@ int move_offset_to_new_line(int offset);
 void print_backspace();
 void display_init();
 int cursor_flash();
+void print_prompt(char *prompt,enum vga_color color);
 
 
 #endif

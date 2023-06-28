@@ -1,6 +1,8 @@
 #include "../include/vga.h"
 #include "../include/memory.h"
 #include "../include/keyboardmap.h"
+#include "../include/time.h"
+#include "../include/def.h"
 unsigned char port_byte_in(unsigned short port) {
     unsigned char result;
     __asm__("in %%dx, %%al" : "=a" (result) : "d" (port));
@@ -10,10 +12,10 @@ unsigned char port_byte_in(unsigned short port) {
 void port_byte_out(unsigned short port, unsigned char data) {
     __asm__("out %%al, %%dx" : : "a" (data), "d" (port));
 }
-void set_char_at_video_memory(char character, int offset) {
+void set_char_at_video_memory(char character, int offset, enum vga_color color) {
     unsigned char *vidmem = (unsigned char *) VIDEO_ADDRESS;
     vidmem[offset] = character;
-    vidmem[offset + 1] = default_font_color;
+    vidmem[offset + 1] = color;
 }
 void set_cursor(int offset) {
     offset /= 2;
@@ -45,7 +47,7 @@ int move_offset_to_new_line(int offset) {
     return get_offset(0, get_row_from_offset(offset) + 1);
 }
 
-void print_string(char *string) {
+void print_string(char *string, enum vga_color color) {
     int offset = get_cursor();
     int i = 0;
     while (string[i] != 0) {
@@ -56,12 +58,14 @@ void print_string(char *string) {
         }
         if (string[i] == '\n' || string == ENTER)
         {
-
+            
+            set_char_at_video_memory(' ', get_cursor(),color);
             offset = move_offset_to_new_line(offset);
+            
         }
         else
         {
-            set_char_at_video_memory(string[i], offset);
+            set_char_at_video_memory(string[i], offset,color);
             
             offset += 2;
 
@@ -73,9 +77,9 @@ void print_string(char *string) {
 }
 void print_backspace() {
     int newCursor = get_cursor() - 2;
-    set_char_at_video_memory(' ', newCursor);
-    set_char_at_video_memory(' ', newCursor+1);
-    set_char_at_video_memory(' ', newCursor+2);
+    set_char_at_video_memory(' ', newCursor,default_font_color);
+    set_char_at_video_memory(' ', newCursor+1,default_font_color);
+    set_char_at_video_memory(' ', newCursor+2,default_font_color);
     set_cursor(newCursor);
 }
 
@@ -84,7 +88,7 @@ void display_init()
     set_cursor(0);
     for (int i = 0; i < MAX_COLS*MAX_ROWS; i++)
     {
-        set_char_at_video_memory(' ',i*2);
+        set_char_at_video_memory(' ',i*2,default_font_color);
     }
     set_cursor(0);
 }
@@ -94,14 +98,17 @@ int scroll(int offset)
     memory_copy((char *)(get_offset(0,1)+VIDEO_ADDRESS),(char *)(get_offset(0,0)+VIDEO_ADDRESS),MAX_COLS*(MAX_ROWS-1)*2);
     for (int col = 0; col < MAX_COLS; col++)
     {
-        set_char_at_video_memory(' ',get_offset(col,MAX_ROWS-1));
+        set_char_at_video_memory(' ',get_offset(col,MAX_ROWS-1),default_font_color);
     }
     return offset - 2*MAX_COLS;
     
 
 }
-
+void print_prompt(char *prompt,enum vga_color color)
+{
+    print_string(prompt,color);
+}
 int cursor_flash()
 {
-    set_char_at_video_memory('_',get_cursor());
+    set_char_at_video_memory('_',get_cursor(),default_font_color);
 }
