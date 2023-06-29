@@ -39,11 +39,13 @@ iso: HackOS.bin
 	mkdir iso/boot
 	mkdir iso/boot/grub
 	cp HackOS.bin iso/boot/HackOS.bin
+	cp HDD.img iso/boot/HDD.img
 	echo 'set timeout=0'                      > iso/boot/grub/grub.cfg
 	echo 'set default=0'                     >> iso/boot/grub/grub.cfg
 	echo ''                                  >> iso/boot/grub/grub.cfg
 	echo 'menuentry "HackOS" {'            >> iso/boot/grub/grub.cfg
 	echo '  multiboot /boot/HackOS.bin'   >> iso/boot/grub/grub.cfg
+	echo '  module2 (cd)/HDD.img'   >> iso/boot/grub/grub.cfg
 	echo '  boot'                            >> iso/boot/grub/grub.cfg
 	echo '}'                                 >> iso/boot/grub/grub.cfg
 	grub-mkrescue --output=HackOS.iso iso
@@ -66,5 +68,12 @@ changlog-test:
 changlog:
 	./update_changelog
 run:
+	make iso
+	qemu-system-x86_64 -cdrom HackOS.iso -hda HDD.img -serial file:"serial.log"
+run-c:
+	make iso
+	qemu-system-x86_64 HackOS.iso -drive file=HDD.img -serial stdio
+
+run-nd:
 	make iso
 	qemu-system-x86_64 HackOS.iso -drive file=HDD.img

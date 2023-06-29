@@ -5,13 +5,14 @@
 #include "../include/string.h"
 #include "../include/time.h"
 #include "../include/def.h"
+#include "../include/debug.h"
 int kernel_early()
 {
        
        
     
 }
-char *ctos(char s[2], const char c)
+char *ctos_old(char s[2], const char c)
 {
     s[0] = c;
     s[1] = '\0';
@@ -21,11 +22,19 @@ char *ctos(char s[2], const char c)
 int main()
 {
        display_init();
+       init_serial();
+       write_serial(':');
+       printf("%d",23);
+       // for (int i = 1; i < 9; i++)
+       // {
+       //        write_serial_i(i);
+       // }
        
+       //write_serial_i(12);
        //putpixel(0,100,"4");
        //delay(40);
-       char* fis;
-       fis = read();
+       unsigned char fis;
+       
        
        
        char* numbers[] = {"01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","59","60"};
@@ -39,15 +48,22 @@ int main()
        print_string(" \nCurrent Calendar: ",COLOR_LIGHT_RED);
        get_year();
        print_string("\n",default_font_color);
-
+       //set_int_at_video_memory(400,get_cursor(),default_font_color);
        // time = ctos(time, second);
        print_prompt(PROMPT,PROMPT_COLOR);
-       print_string("\n",default_font_color);
-       print_string(fis,COLOR_MAGENTA);
-       if(compare_string(fis,"k")==0)
-       {
-              print_string("\nREADY",COLOR_MAGENTA);
-       }
+       //print_string("\n",default_font_color);
+       
+       
+       // for (size_t i = 0; i < string_length(fis); i++)
+       // {
+       //       write_serial(fis[i]);
+       // }
+       
+       
+       // if(fis == 255)
+       // {
+       //        print_string("\nREADY",COLOR_MAGENTA);
+       // }
        
        // //print_string(time);
        // for (int i = 0; i < 900; i++)
@@ -65,7 +81,7 @@ int main()
 
        // write_string(1,"kernel");
        // write_string(2,"kernel2");
-
+       write_serial(1);
        while(1==1)
        {
               while(byte = scan())
@@ -116,7 +132,7 @@ int main()
               }
               //int sec = get_second();
               cursor_flash();
-              update_time();
+              //update_time();
 
        }
     
