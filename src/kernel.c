@@ -8,7 +8,7 @@
 #include "../include/debug.h"
 #include "../include/tty.h"
 #include "../include/serial.h"
-
+#include "../include/terminal.h"
 // int kernel_early()
 // {
        
@@ -17,16 +17,26 @@
 // }
 int init_system()
 {
-       terminal_initialize(COLOR_BLUE,COLOR_BLACK);
+       terminal_initialize(COLOR_WHITE,COLOR_BLACK);
        init_serial(DEFAULT_COM_DEBUG_PORT);
        write_serial("f",DEFAULT_COM_DEBUG_PORT);
-       set_cursor(get_offset(23,0));
-       print_string("COM1: ",COLOR_MAGENTA);
-       //Console
-       printf("\n--------------------------------Console-----------------------------------------");
-      
+       draw_terminal();
 
 
+}
+void on_enter(char *buffer)
+{
+       cls_command_output();
+       terminal_set_colors(COLOR_MAGENTA,COLOR_BLACK);
+       set_cursor(get_offset(0,1));
+       printf("Command: ");
+       terminal_set_colors(COLOR_LIGHT_GREEN,COLOR_BLACK);
+       printf(buffer);
+       buffer[0] = '\0';
+       terminal_set_colors(COLOR_LIGHT_GREEN,COLOR_BLACK);
+       reset_console(COLOR_LIGHT_GREEN,COLOR_BLACK);
+       printf(">");
+       terminal_set_colors(COLOR_BLACK, COLOR_WHITE);
 }
 char *ctos_old(char s[2], const char c)
 {
@@ -38,8 +48,9 @@ int mode = 1;
 int main()
 {
        init_system();
-       terminal_set_colors(COLOR_LIGHT_GREEN, COLOR_BLACK);
-       printf("Command>");
+       printf(">");
+       terminal_set_colors(COLOR_BLACK, COLOR_WHITE);
+       
        
        //write_serial(':');
        
@@ -128,12 +139,17 @@ int main()
                      {
                             if(strcmp(buffer, "dump log") == 0)
                             {
-                                   dump_log();
+                                   //dump_log();
                             }
-                            printf("\n");
-                            buffer[0] = '\0';
-                            terminal_set_colors(COLOR_LIGHT_GREEN,COLOR_BLACK);
-                            printf("Command>");
+                            else if(strcmp(buffer, "xx") == 0)
+                            {
+                                   set_cursor(get_offset(5,9));
+                                   printf("DAVE");
+
+                            }
+                            //printf("\n");
+                            on_enter(buffer);
+                            
                             
                             
 

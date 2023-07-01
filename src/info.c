@@ -7,7 +7,7 @@ char *log;
 void write_info(char c)
 {
     set_char_at_video_memory(c, get_offset(29,0),default_font_color);
-    log_info(c);
+    //log_info(c);
 }
 
 void log_info(char*c)

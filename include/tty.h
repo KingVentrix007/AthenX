@@ -37,5 +37,7 @@ int get_terminal_col(void);
 void term_putc(char c, enum vga_color char_color);
 int set_terminal_row(int row);
 int set_terminal_col(int col);
-void terminal_putentryat(char c, uint8_t color, size_t x, size_t y);
+void terminal_putentryat(char c, uint8_t color, int offset);
+int reset_console(enum vga_color font_color, enum vga_color background_color);
+void cls_command_output();
 #endif
