@@ -3,6 +3,8 @@
 #include "vga.h"
 #define PROMPT  "Command>"
 #define PROMPT_COLOR  COLOR_LIGHT_CYAN
+#define INPUT_TEXT_FR COLOR_BLACK
+#define INPUT_TEXT_BR COLOR_WHITE
 #define INT_MAX 2147483647
 #define INT_MIN -2147483648
 #define EPS 1.073741824e-16

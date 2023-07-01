@@ -445,7 +445,7 @@ void cls_command_output()
         
         for(int i = 0; i <= 20; i++)
         {
-            set_cursor(get_offset(j,i));
+            set_cursor(get_offset(i,j));
             terminal_set_colors(COLOR_BLACK,COLOR_BLACK);
             printf(" ");
 
