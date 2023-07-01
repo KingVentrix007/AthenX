@@ -6,11 +6,27 @@
 #include "../include/time.h"
 #include "../include/def.h"
 #include "../include/debug.h"
-int kernel_early()
-{
+#include "../include/tty.h"
+#include "../include/serial.h"
+
+// int kernel_early()
+// {
        
        
     
+// }
+int init_system()
+{
+       terminal_initialize(COLOR_BLUE,COLOR_BLACK);
+       init_serial(DEFAULT_COM_DEBUG_PORT);
+       write_serial("f",DEFAULT_COM_DEBUG_PORT);
+       set_cursor(get_offset(23,0));
+       print_string("COM1: ",COLOR_MAGENTA);
+       //Console
+       printf("\n--------------------------------Console-----------------------------------------");
+      
+
+
 }
 char *ctos_old(char s[2], const char c)
 {
@@ -18,13 +34,17 @@ char *ctos_old(char s[2], const char c)
     s[1] = '\0';
     return s;
 }
-
+int mode = 1;
 int main()
 {
-       display_init();
-       init_serial();
-       write_serial(':');
-       printf("%d",23);
+       init_system();
+       terminal_set_colors(COLOR_LIGHT_GREEN, COLOR_BLACK);
+       printf("Command>");
+       
+       //write_serial(':');
+       
+       
+       
        // for (int i = 1; i < 9; i++)
        // {
        //        write_serial_i(i);
@@ -43,14 +63,16 @@ int main()
        int off = 0;
        uint8_t byte;
        
-       print_string("Current time: ",COLOR_LIGHT_RED);
-       get_time();
-       print_string(" \nCurrent Calendar: ",COLOR_LIGHT_RED);
-       get_year();
-       print_string("\n",default_font_color);
-       //set_int_at_video_memory(400,get_cursor(),default_font_color);
-       // time = ctos(time, second);
-       print_prompt(PROMPT,PROMPT_COLOR);
+       
+       // print_string("Current time: ",COLOR_LIGHT_RED);
+       // get_time();
+       // print_string(" \nCurrent Calendar: ",COLOR_LIGHT_RED);
+       // get_year();
+       // print_string("\n",default_font_color);
+       // //set_int_at_video_memory(400,get_cursor(),default_font_color);
+       // // time = ctos(time, second);
+       // print_prompt(PROMPT,PROMPT_COLOR);
+       //printf("%d",45);
        //print_string("\n",default_font_color);
        
        
@@ -81,7 +103,7 @@ int main()
 
        // write_string(1,"kernel");
        // write_string(2,"kernel2");
-       write_serial(1);
+       //write_serial(1);
        while(1==1)
        {
               while(byte = scan())
@@ -104,9 +126,14 @@ int main()
                      
                      if(byte == ENTER)
                      {
-                            print_string("\n",COLOR_LIGHT_RED);
+                            if(strcmp(buffer, "dump log") == 0)
+                            {
+                                   dump_log();
+                            }
+                            printf("\n");
                             buffer[0] = '\0';
-                            print_prompt(PROMPT,PROMPT_COLOR);
+                            terminal_set_colors(COLOR_LIGHT_GREEN,COLOR_BLACK);
+                            printf("Command>");
                             
                             
 
@@ -115,24 +142,41 @@ int main()
                      {
                             if(backspace(buffer))
                             {
-                                   print_backspace();
+                                   printf("\b");
                             }
                             
+
+                     }
+                     else if (byte >= 60 && byte <=79)
+                     {
+                            //int byt = (char)(byte);
+                            //printf("%c",byt);
 
                      }
                     
                      
                      else{
                             append(buffer,c);
-                            print_string(s,default_font_color);
+                            //printf("\n");
+                            if(strcmp(s,"-") == 0)
+                            {
+                                   terminal_set_colors(COLOR_LIGHT_GREY,COLOR_BLACK);
+                            }
+                            else if(strcmp(s," ") == 0)
+                            {
+                                   
+                                   terminal_set_colors(COLOR_LIGHT_GREEN,COLOR_BLACK);
+                                   
+                            }
+                            printf(s);
                      }
                      
                      
                      
               }
               //int sec = get_second();
-              cursor_flash();
-              //update_time();
+              //cursor_flash();
+              update_time();
 
        }
     

@@ -36,7 +36,7 @@ unsigned char read(int sec)
     fis = inb(0x1f0);
     if(fis == 255)
     {
-        write_serial(fis);
+        //write_serial(fis);
         print_string("HELLO");   
     }
     //write_serial(fis);

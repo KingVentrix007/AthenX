@@ -6,5 +6,6 @@
 #define INT_MAX 2147483647
 #define INT_MIN -2147483648
 #define EPS 1.073741824e-16
+#define DEFAULT_COM_DEBUG_PORT 0x3f8
 
 #endif

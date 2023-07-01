@@ -39,7 +39,8 @@ char *toupper(char *string);
 char *tolower(char *string);
 static char *sitoa(char *buf, unsigned int num, int width, enum flag_itoa flags);
 void itoa(char *str, int num, int base);
-
+int vsprintf(char *buf, const char *fmt, va_list va);
+int sprintf(char *buf, const char *fmt, ...);
 uint32_t atoi(const char *str);
 double atof(char *str);
 char *ftoa(char *buf, float f, int precision);

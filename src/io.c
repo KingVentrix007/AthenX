@@ -41,11 +41,16 @@ uint8_t scan(void)
     unsigned char brk;
     static uint8_t key = 0;
     uint8_t read_char = input_bytes(0x60); // keyboard port
+    uint8_t old_char = read_char; 
     brk = read_char & 0x80;
     read_char = read_char & 0x7f;
     if (brk)
     {
         return key = 0;
+    }
+    else if(input_bytes(0x60) == 0x0f)
+    {
+        return "F1";
     }
     else if (read_char != key)
     {
