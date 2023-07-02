@@ -440,10 +440,10 @@ void terminal_set_colors(enum vga_color font_color, enum vga_color background_co
 void cls_command_output()
 {
     
-    for (int j = 0; j < 2; j++)
+    for (int j = 1; j < 4; j++)
     {
         
-        for(int i = 0; i <= 20; i++)
+        for(int i = 0; i <= 80; i++)
         {
             set_cursor(get_offset(i,j));
             terminal_set_colors(COLOR_BLACK,COLOR_BLACK);

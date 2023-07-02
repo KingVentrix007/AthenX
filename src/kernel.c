@@ -160,12 +160,12 @@ int main()
                             //
                             if(backspace(buffer))
                             {
-                                   if(strlen(buffer) == 0)
-                                   {
-                                   printf(" ");
-                                   append(" ",buffer);
-                                   //set_cursor(get_cursor()+1);
-                                   }
+                                   // if(strlen(buffer) == 0)
+                                   // {
+                                   // printf(" ");
+                                   // append(" ",buffer);
+                                   // //set_cursor(get_cursor()+1);
+                                   // }
                                    terminal_set_colors(COLOR_WHITE,COLOR_BLACK);
                                    set_cursor(get_cursor()+1);
                                    printf("\b");
