@@ -7,13 +7,15 @@ LDPARAMS = -melf_i386
 SRC_DIR=src
 HDR_DIR=include/
 OBJ_DIR=obj
-
+START_ASM = asm/
+OBJ_ASM = asm
 SRC_FILES1=$(wildcard $(SRC_DIR)/*.c)
 OBJ_FILES1=$(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC_FILES1))
 SRC_FILES2=$(wildcard $(SRC_DIR)/*.s)
 OBJ_FILES2=$(patsubst $(SRC_DIR)/%.s, $(OBJ_DIR)/%.o, $(SRC_FILES2))
 SRC_FILES3=$(wildcard $(SRC_DIR)/*.asm)
 OBJ_FILES3=$(patsubst $(SRC_DIR)/%.asm, $(OBJ_DIR)/%.o, $(SRC_FILES3))
+
 
 # check_dir:
 # 	if [ ! -d "$(OBJ_DIR)" ]; then \
@@ -26,11 +28,12 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.s
 	$(AS) $(ASPARAMS) -o $@ $<
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.asm
+$(OBJ_ASM)/%.o: $(START_ASM)/%.asm
 	nasm -f elf32 -o $@ $<
 
 HackOS.bin: $(SRC_DIR)/linker.ld $(OBJ_FILES1) $(OBJ_FILES2) $(OBJ_FILES3)
-	ld $(LDPARAMS) -T $< -o $@ $(OBJ_DIR)/*.o
+	nasm -f elf $(OBJ_ASM)/start.asm
+	ld $(LDPARAMS) -T $< -o $@  $(OBJ_ASM)/start.o $(OBJ_DIR)/*.o
 
 iso: HackOS.bin
 	make clean
