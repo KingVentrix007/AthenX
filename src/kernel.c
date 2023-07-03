@@ -9,12 +9,16 @@
 #include "../include/tty.h"
 #include "../include/serial.h"
 #include "../include/terminal.h"
-// int kernel_early()
-// {
+#include "../include/gdt.h"
+#include "../include/idt.h"
+#include "../include/irq.h"
+#include "../include/isrs.h"
+int kernel_early()
+{
        
        
     
-// }
+}
 int init_system()
 {
        terminal_initialize(COLOR_WHITE,COLOR_BLACK);
