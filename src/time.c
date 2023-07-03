@@ -158,6 +158,8 @@ void update_time()
 {
     int old_cursor = get_cursor();
     set_cursor(0);
+    //print_string
+    //terminal_set_colors(COLOR_RED,COLOR_BLACK);
     print_string("Current time: ",COLOR_LIGHT_RED);
     get_time();
     set_cursor(old_cursor);

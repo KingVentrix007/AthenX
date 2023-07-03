@@ -1,5 +1,5 @@
 ; Read some sectors from the boot disk using our disk_read function
-[ org 0x7c00 ]
+
 mov [ BOOT_DRIVE ], dl ; BIOS stores our boot drive in DL , so it 's
 ; best to remember this for later.
 mov bp , 0x8000 ; Here we set our stack safely out of the
@@ -13,13 +13,13 @@ mov dx , [0x9000 ] ; Print out the first loaded word , which
 ; at address 0 x9000
 mov dx , [0x9000 + 512] ; Also , print the first word from the
 
-jmp $
+
 
 ; Global variables
 
 ; Bootsector padding
 
-%include "start.asm"
+
 
 BOOT_DRIVE : db 0
 times 510 -($-$$) db 0

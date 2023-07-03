@@ -31,13 +31,17 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.s
 $(OBJ_ASM)/%.o: $(START_ASM)/%.asm
 	nasm -f elf32 -o $@ $<
 
+bootl:
+	(cd asm ; nasm -f elf bootloader.asm)
+	
+
 HackOS.bin: $(SRC_DIR)/linker.ld $(OBJ_FILES1) $(OBJ_FILES2) $(OBJ_FILES3)
 	nasm -f elf $(OBJ_ASM)/start.asm
-	ld $(LDPARAMS) -T $< -o $@  $(OBJ_ASM)/start.o $(OBJ_DIR)/*.o
-
+	ld $(LDPARAMS) -T $< -o  $@ $(OBJ_ASM)/start.o $(OBJ_DIR)/*.o
+	
 iso: HackOS.bin
 	make clean
-	make
+	make HackOS.bin
 	mkdir iso
 	mkdir iso/boot
 	mkdir iso/boot/grub

@@ -14,8 +14,3 @@ disk_load :
     cmp dh , al ; if AL ( sectors read ) != DH ( sectors expected )
  ;   jne disk_error ; display error message
     ret
-disk_error :
-    mov bx , DISK_ERROR_MSG
-    jmp $
-; Variables
-DISK_ERROR_MSG db " Disk read error !", 0

@@ -22,8 +22,12 @@ int kernel_early()
 }
 
 int init_system()
-{
+{      
+       //def_rows();
+        //delay(100);
        terminal_initialize(COLOR_WHITE,COLOR_BLACK);
+       
+      
        //printf("Start");
        
        gdt_install();
@@ -47,6 +51,9 @@ void on_enter(char *buffer)
        
               
        cls_command_output();
+       refresh_row(0,0);
+       set_cursor(get_offset(23,0));
+       print_string("COM1: ",COLOR_MAGENTA);
        terminal_set_colors(COLOR_MAGENTA,COLOR_BLACK);
        set_cursor(get_offset(0,1));
        printf("Command: ");
@@ -56,6 +63,7 @@ void on_enter(char *buffer)
        buffer[0] = '\0';
        terminal_set_colors(COLOR_LIGHT_GREEN,COLOR_BLACK);
        reset_console(COLOR_LIGHT_GREEN,COLOR_BLACK);
+       //delay(10);
        printf(">");
        terminal_set_colors(INPUT_TEXT_FR, INPUT_TEXT_BR);
 }
@@ -71,6 +79,7 @@ int main()
        size_t *log[1000];
        init_system();
        printf(">");
+      
        terminal_set_colors(INPUT_TEXT_FR, INPUT_TEXT_BR);
        
        
@@ -163,9 +172,25 @@ int main()
                             if(strcmp(buffer, "dump") == 0)
                             {
                                    //terminal_set_colors(COLOR_MAGENTA,COLOR_LIGHT_GREY);
-                                   
-                                   printf("Here");
+                                   //printf("F\n");
+                                  reg();
                             }
+                            if(strcmp(buffer,"test") == 0)
+                            {
+                                   for (size_t i = 0; i < 200; i++)
+                                   {
+                                         
+                                          printf("%d\n",get_cursor());
+                                          delay(1);
+                                   }
+                                   
+                            }
+                            // else if (strcmp(buffer,"go") == 0)
+                            // {
+                                    
+                                    
+                            // }
+                            
                            
                             on_enter(buffer);
                             
@@ -223,6 +248,7 @@ int main()
                             //        terminal_set_colors(COLOR_LIGHT_GREEN,COLOR_BLACK);
                                    
                             // }
+                            terminal_set_colors(COLOR_BLACK,COLOR_WHITE);
                             printf(s);
                      }
                     

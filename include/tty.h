@@ -40,4 +40,6 @@ int set_terminal_col(int col);
 void terminal_putentryat(char c, uint8_t color, int offset);
 int reset_console(enum vga_color font_color, enum vga_color background_color);
 void cls_command_output();
+void def_rows();
+int refresh_row(int delay_sec,int row);
 #endif

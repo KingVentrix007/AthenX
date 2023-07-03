@@ -91,8 +91,17 @@ void terminal_putchar(char c)
 {
     if (c == '\n' || c == '\r')
     {
-        terminal_column = 0;
-        terminal_row++;
+        // terminal_column = 0;
+        // terminal_row++;
+        // 2 * (row * MAX_COLS + col);
+        // row = r
+        // MAX_VOLS = m
+        //col = c
+        // offset = o
+        //O=2R2M+2C
+        //
+        //offset = ;
+        set_cursor(move_offset_to_new_line(get_cursor()));
         if (terminal_row == VGA_HEIGHT)
             reset_console(COLOR_LIGHT_GREEN,COLOR_BLACK);
             
@@ -101,7 +110,7 @@ void terminal_putchar(char c)
     else if (c == '\t')
     {
         terminal_column += 4;
-        set_cursor(get_offset+4); 
+        set_cursor(get_cursor()+4); 
         return;
     }
     else if (c == '\b')
@@ -446,11 +455,40 @@ void cls_command_output()
         for(int i = 0; i <= 79; i++)
         {
             set_cursor(get_offset(i,j));
-            terminal_set_colors(COLOR_BLACK,COLOR_BLACK);
+            terminal_set_colors(COLOR_WHITE,COLOR_BLACK);
             printf(" ");
 
         }
 
     }
     
+}
+
+void def_rows()
+{
+    for (size_t y = 0; y <= 80; y++)
+    {
+        for (size_t x = 0; x <= 25; x++)
+        {
+            set_cursor(get_offset(y,x));
+            terminal_set_colors(default_font_color,COLOR_BLACK);
+            printf(" ");
+            //delay(1);
+        }
+        delay(1);
+        
+    }
+    
+}
+int refresh_row(int delay_sec,int row)
+{
+    for (size_t i = 0; i < 80; i++)
+    {
+        set_cursor(get_offset(i,row));
+        terminal_set_colors(COLOR_BLACK,COLOR_BLACK);
+        printf(" ");
+        delay(delay_sec);
+    }
+    
+
 }
