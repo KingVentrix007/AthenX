@@ -443,7 +443,7 @@ void cls_command_output()
     for (int j = 1; j < 4; j++)
     {
         
-        for(int i = 0; i <= 80; i++)
+        for(int i = 0; i <= 79; i++)
         {
             set_cursor(get_offset(i,j));
             terminal_set_colors(COLOR_BLACK,COLOR_BLACK);
