@@ -22,4 +22,5 @@ typedef struct {
     u32 eflags;
 } ir_context_t;
 void reg();
+void PANIC_T(char* msg);
 #endif

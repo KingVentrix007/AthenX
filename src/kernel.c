@@ -177,12 +177,15 @@ int main()
                             }
                             if(strcmp(buffer,"test") == 0)
                             {
-                                   for (size_t i = 0; i < 200; i++)
-                                   {
+                                   //printf("%d",67);
+                                   //delay(10);
+                                   PANIC("ERROR");
+                                   // for (size_t i = 0; i < 200; i++)
+                                   // {
                                          
-                                          printf("%d\n",get_cursor());
-                                          delay(1);
-                                   }
+                                   //        printf("%d\n",get_cursor());
+                                   //        delay(1);
+                                   // }
                                    
                             }
                             // else if (strcmp(buffer,"go") == 0)
@@ -258,7 +261,13 @@ int main()
               }
               // //int sec = get_second();
               // //cursor_flash();
-              update_time();
+              int old_cursor = get_cursor();
+              set_cursor(0);
+              //print_string
+              //terminal_set_colors(COLOR_RED,COLOR_BLACK);
+              print_string("Current time: ",COLOR_LIGHT_RED);
+              get_time();
+              set_cursor(old_cursor);
 
        }
     

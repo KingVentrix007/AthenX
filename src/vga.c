@@ -5,6 +5,7 @@
 #include "../include/def.h"
 #include "../include/debug.h"
 #include "../include/string.h"
+#include "../include/tty.h"
 unsigned char port_byte_in(unsigned short port) {
     unsigned char result;
     __asm__("in %%dx, %%al" : "=a" (result) : "d" (port));
