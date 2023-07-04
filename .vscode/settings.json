@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "stdarg.h": "c"
+        "stdarg.h": "c",
+        "iso646.h": "c",
+        "errno.h": "c"
     }
 }

@@ -1,2 +1,2 @@
 DEBUG FROM COM1(0x3f8):
->test67PANIC at src/kernel.c@(182) (main): ERROR                                                                                                                                                                                                                                                                                                                                Command: test>
+>

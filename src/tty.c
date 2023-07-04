@@ -493,6 +493,7 @@ int refresh_row(int delay_sec,int row)
 }
 void kprintf(char * template,...)
 {
+    //PANIC_T("null");
     va_list parameters;
     va_start(parameters, template);
     int written = 0;

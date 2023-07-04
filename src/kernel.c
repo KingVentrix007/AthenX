@@ -13,6 +13,9 @@
 #include "../include/idt.h"
 #include "../include/irq.h"
 #include "../include/isrs.h"
+#include "../include/graphics.h"
+#include <iso646.h>
+
 //#include "../include/kb.h"
 int kernel_early()
 {      
@@ -23,9 +26,15 @@ int kernel_early()
 
 int init_system()
 {      
+       text_editor();
+       
+       putpixel(100,100,"r");
+       //delay(100);
        //def_rows();
+       
         //delay(100);
        terminal_initialize(COLOR_WHITE,COLOR_BLACK);
+       //delay(90);
        
       
        //printf("Start");
@@ -77,7 +86,12 @@ int mode = 1;
 int main()
 {
        size_t *log[1000];
+       //init_graph_vga(80,25,0);
+       //putpixel(0,0,"RED");
+       //delay(10);
        init_system();
+       
+       //get_wait_key_in("w");
        printf(">");
       
        terminal_set_colors(INPUT_TEXT_FR, INPUT_TEXT_BR);
@@ -154,8 +168,8 @@ int main()
                      
                      
                      
-                     
-                     
+                     struct registers reg_old;
+                     reg_old = log_reg();
                      char c = normalmap[byte];
                      // if (spec == SHIFT)
                      // {
@@ -173,19 +187,12 @@ int main()
                             {
                                    //terminal_set_colors(COLOR_MAGENTA,COLOR_LIGHT_GREY);
                                    //printf("F\n");
-                                  reg();
+                                  cmp_reg(reg_old);
                             }
                             if(strcmp(buffer,"test") == 0)
                             {
-                                   //printf("%d",67);
-                                   //delay(10);
-                                   PANIC("ERROR");
-                                   // for (size_t i = 0; i < 200; i++)
-                                   // {
-                                         
-                                   //        printf("%d\n",get_cursor());
-                                   //        delay(1);
-                                   // }
+                                  
+                                  reg();
                                    
                             }
                             // else if (strcmp(buffer,"go") == 0)

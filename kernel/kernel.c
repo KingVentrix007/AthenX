@@ -10,6 +10,7 @@
 #include "../include/serial.h"
 #include "../include/terminal.h"
 // int kernel_early()
+#include <iso646.h>
 // {
        
        

@@ -3,10 +3,14 @@
 #include "../include/string.h"
 #include "../include/tty.h"
 #include "../include/vga.h"
-
+// struct registers
+// {
+//     int eax, ebx, ecx, edx,esi,edi,esp,ebp;
+// }registers_save;
+struct registers registers_save;
 void reg()
 {
-    int eax, ebx, ecx, edx;
+    int eax, ebx, ecx, edx,esi,edi,esp,ebp;
 
     // Inline assembly to move register values to variables
     asm volatile(
@@ -14,10 +18,20 @@ void reg()
         "movl %%ebx, %1\n\t"
         "movl %%ecx, %2\n\t"
         "movl %%edx, %3\n\t"
+        
         : "=r" (eax), "=r" (ebx), "=r" (ecx), "=r" (edx)
         :
         :);
+    asm volatile(
+        "movl %%esi, %0\n\t"
+        "movl %%edi, %1\n\t"
+        "movl %%esp, %2\n\t"
+        "movl %%ebp, %3\n\t"
 
+        : "=r" (esi), "=r" (edi), "=r" (esp), "=r" (ebp)
+        :
+        :);
+    
     // Printing register values
     printf("Register values:");
     
@@ -27,8 +41,89 @@ void reg()
     printf("\nEBX: %x|", ebx);
     printf("\nECX: %x|   ", ecx);
     printf("\nEDX: %x|", edx);
+    printf("\nESI: %x|", esi);
+    printf("\nEDI: %x|",edi);
+
+    printf("\nStack Pointer: %x",esp);
+    printf("\nStack Base Pointer %x",ebp);
     //printf("\n%s",__FILE__);
 
+}
+
+void cmp_reg(struct registers reg_old)
+{
+    int eax, ebx, ecx, edx,esi,edi,esp,ebp;
+
+    // Inline assembly to move register values to variables
+    asm volatile(
+        "movl %%eax, %0\n\t"
+        "movl %%ebx, %1\n\t"
+        "movl %%ecx, %2\n\t"
+        "movl %%edx, %3\n\t"
+        
+        : "=r" (eax), "=r" (ebx), "=r" (ecx), "=r" (edx)
+        :
+        :);
+    asm volatile(
+        "movl %%esi, %0\n\t"
+        "movl %%edi, %1\n\t"
+        "movl %%esp, %2\n\t"
+        "movl %%ebp, %3\n\t"
+
+        : "=r" (esi), "=r" (edi), "=r" (esp), "=r" (ebp)
+        :
+        :);
+    
+    // Printing register values
+    printf("Register values:");
+    
+    //printf("\n");
+    printf("\nEAX: %x|EAX before error: %x", eax,reg_old.eax);
+    //printf("d\nd");
+    printf("\nEBX: %x|EBX before error: %x", ebx,reg_old.ebx);
+    printf("\nECX: %x|ECX before error: %x", ecx, reg_old.ecx);
+    printf("\nEDX: %x|EDX before error: %x", edx,reg_old.edx);
+    printf("\nESI: %x|ESI before error: %x", esi,reg_old.esi);
+    printf("\nEDI: %x|EDI before error: %x",edi,reg_old.edi);
+
+    printf("\nStack Pointer: %x",esp);
+    printf("\tOld Stack pointer: %x",reg_old.esp);
+    printf("\nStack Base Pointer: %x",ebp);
+    printf("\tOld Stack Base Pointer: %x",reg_old.ebp);
+}
+
+struct registers log_reg()
+{
+    int eax, ebx, ecx, edx,esi,edi,esp,ebp;
+
+    // Inline assembly to move register values to variables
+    asm volatile(
+        "movl %%eax, %0\n\t"
+        "movl %%ebx, %1\n\t"
+        "movl %%ecx, %2\n\t"
+        "movl %%edx, %3\n\t"
+        
+        : "=r" (eax), "=r" (ebx), "=r" (ecx), "=r" (edx)
+        :
+        :);
+    asm volatile(
+        "movl %%esi, %0\n\t"
+        "movl %%edi, %1\n\t"
+        "movl %%esp, %2\n\t"
+        "movl %%ebp, %3\n\t"
+
+        : "=r" (esi), "=r" (edi), "=r" (esp), "=r" (ebp)
+        :
+        :);
+    registers_save.eax = eax;
+    registers_save.ebx = ebx;
+    registers_save.ecx = ecx;
+    registers_save.edx = edx;
+    registers_save.esi = esi;
+    registers_save.edi = edi;
+    registers_save.esp = esp;
+    registers_save.ebp = ebp;
+    return registers_save;
 }
 
 
@@ -47,9 +142,8 @@ void PANIC_T(char* msg)
         //delay(1);
         
     }
-    printf(msg);
-    printf("LINE(%d), FILE(%s),",__LINE__,__FILE__);
-    for(;;);
+    //PANIC(msg);
+    //for(;;);
     
 
 

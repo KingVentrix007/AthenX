@@ -49,6 +49,7 @@ iso: HackOS.bin
 	cp HDD.img iso/boot/HDD.img
 	echo 'set timeout=0'                      > iso/boot/grub/grub.cfg
 	echo 'set default=0'                     >> iso/boot/grub/grub.cfg
+	echo 'vga=786'                                  >> iso/boot/grub/grub.cfg
 	echo ''                                  >> iso/boot/grub/grub.cfg
 	echo 'menuentry "HackOS" {'            >> iso/boot/grub/grub.cfg
 	echo '  multiboot /boot/HackOS.bin'   >> iso/boot/grub/grub.cfg
@@ -76,7 +77,7 @@ changlog:
 	./update_changelog
 run:
 	make iso
-	qemu-system-x86_64 -cdrom HackOS.iso -hda HDD.img -serial file:"serial.log"
+	qemu-system-x86_64 -cdrom HackOS.iso -serial file:"serial.log"
 run-c:
 	make iso
 	qemu-system-x86_64 HackOS.iso -drive file=HDD.img -serial stdio

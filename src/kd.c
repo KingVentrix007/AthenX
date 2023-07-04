@@ -4,7 +4,7 @@
 #include "../include/idt.h"
 #include "../include/irq.h"
 #include "../include/isrs.h"
-
+#include "../include/string.h"
 unsigned char kbdus[128] =
 {
     0,  27, '1', '2', '3', '4', '5', '6', '7', '8',	/* 9 */
@@ -46,7 +46,7 @@ unsigned char kbdus[128] =
 };
 
 
-void keyboard_handler(struct regs *r)
+void keyboard_handler()
 {
     unsigned char scancode;
 
@@ -63,6 +63,7 @@ void keyboard_handler(struct regs *r)
     }
     else
     {
+         
         /* Here, a key was just pressed. Please note that if you
         *  hold a key down, you will get repeated key press
         *  interrupts. */
@@ -90,4 +91,26 @@ void keyboard_handler(struct regs *r)
 void keyboard_install()
 {
     irq_install_handler(1, keyboard_handler);
+}
+
+char get_wait_key_in(char* wait_for)
+{
+    //printf(wait_for);
+    while(1==1)
+    {
+        unsigned char scancode;
+        scancode = input_bytes(0x60);
+
+        char character = kbdus[scancode];
+        
+        char *decode;
+		    decode = ctos(decode, character);
+        if(strcmp(decode,wait_for) == 0)
+        {
+          break;
+        }
+        //memory_copy(decode, buffer,strlen(decode));
+        
+
+    }
 }

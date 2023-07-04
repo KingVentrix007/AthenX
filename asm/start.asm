@@ -7,6 +7,9 @@ global gdt_flush
 extern gp
 global idt_load
 extern idtp
+global start_vm86_mode
+global bios_interrupt
+global exit
 section .text
 	align 4					; enforce alignment of instruction
 	dd 0x1BADB002			; magic number (double-word) required by GRUB
@@ -15,12 +18,41 @@ section .text
 
 _start:
 	cli						; clear interrupts
-	mov esp, stack			; point the stack pointer to allocate memory
+	mov esp, stack	
+    ;call start_vm86_mode	
+    call bios_interrupt	; point the stack pointer to allocate memory
 	call kernel_early		; function to be called before main
 	call main				; call external main function
 	hlt						; halt
 
 
+start_vm86_mode:
+	xor eax, eax
+	mov ax, 0x00                ; The descriptor of the tss in the gdt //TODO
+	ltr ax						; load the task register
+	ret
+
+bios_interrupt:		
+    call start_vm86_mode
+    jmp $		; Function used to call an interrupt in v8086 mode
+	push ebp
+	mov ebp, esp
+
+	mov ah, 0
+    mov al, 0x13 	; Set the function number 
+	int 0x10
+    MOV AH, 6 ; scroll up function 
+    XOR AL, AL ; clear entire screen 
+    XOR CX, CX ; upper left corner is (0,0) 
+    MOV DX, 184FH ; lower right corner is (4Fh, 18H) 
+    MOV BH, 7 ; normal video attribute 
+    INT 10H ; clear screen					; Call the bios interrupt
+
+	pop ebp
+	add esp, 4
+	call start_vm86_mode		; Restart vm8086 mode
+	add esp, 2
+	ret
 gdt_flush:
     lgdt [gp]
     mov ax, 0x10
@@ -477,6 +509,9 @@ irq_common_stub:
     add esp, 8
     iret
 
+
+exit:
+	nop
 ; Here is the definition of our BSS section. Right now, we'll use
 ; it just to store the stack. Remember that a stack actually grows
 ; downwards, so we declare the size of the data before declaring

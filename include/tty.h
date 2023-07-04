@@ -77,9 +77,7 @@ extern int __loglevel;
 /*
  * As above, but after printing the message, CPU is halted
  */
-#define PANIC(...) do {kprintf("PANIC at %s@(%d) (%s): ", __FILE__, __LINE__, __FUNCTION__); \
-                     kprintf(__VA_ARGS__); \
-                     } while (0)
+
 
 void kprintf(char* template, ...);
 #endif

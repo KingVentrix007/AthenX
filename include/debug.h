@@ -21,6 +21,17 @@ typedef struct {
     u32 cs_old;
     u32 eflags;
 } ir_context_t;
+typedef struct registers
+{
+    int eax, ebx, ecx, edx,esi,edi,esp,ebp;
+};
+
 void reg();
+struct registers log_reg();
+void cmp_reg(struct registers reg_old);
 void PANIC_T(char* msg);
+#include "tty.h"
+#define PANIC(...) do {kprintf("PANIC at %s@%d (%s):", __FILE__, __LINE__, __FUNCTION__); \
+                     kprintf(__VA_ARGS__);kprintf("\n"); reg();\
+                     } while(0);
 #endif
