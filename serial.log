@@ -1,2 +1,2 @@
-DEBUG FROM COM1(0x3f8):
->
+GDT initIDT initISRS initIRQ initInitializing serialDEBUG FROM COM1(0x3f8):
+Drawing terminal>

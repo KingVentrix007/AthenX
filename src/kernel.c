@@ -16,32 +16,38 @@
 #include "../include/graphics.h"
 #include <iso646.h>
 
-//#include "../include/kb.h"
+
 int kernel_early()
 {      
-       // printf("Called");
+       init_system(1);
+       
 
     
 }
 
-int init_system()
+int init_system(int graph_mode)
 {      
-       text_editor();
+       if(graph_mode == 1)
+       {
+              vga_init();
+              VGA_put_pixel(5,5,2,0x01);
+
+       }
+       else if (graph_mode == 0)
+       {
+             terminal_initialize(COLOR_WHITE,COLOR_BLACK);
+       }
        
-       putpixel(100,100,"r");
-       //delay(100);
-       //def_rows();
+       //delay(10);
        
-        //delay(100);
-       terminal_initialize(COLOR_WHITE,COLOR_BLACK);
-       //delay(90);
-       
-      
-       //printf("Start");
-       
+       set_cursor(get_offset(0,0));
+       printf("GDT init\n");
        gdt_install();
+       printf("IDT init\n");
        idt_install();
+       printf("ISRS init\n");
        isrs_install();
+       printf("IRQ init\n");
        irq_install();
        //keyboard_install();
        __asm__ __volatile__ ("sti");
@@ -49,8 +55,11 @@ int init_system()
        //printf("Done");
        
        //delay(10);
+       printf("Initializing serial\n");
        init_serial(DEFAULT_COM_DEBUG_PORT);
        write_string_serial("DEBUG FROM COM1(0x3f8):\n\0",DEFAULT_COM_DEBUG_PORT);
+       printf("Drawing terminal");
+       //delay(5);
        draw_terminal();
 
 
@@ -76,39 +85,20 @@ void on_enter(char *buffer)
        printf(">");
        terminal_set_colors(INPUT_TEXT_FR, INPUT_TEXT_BR);
 }
-char *ctos_old(char s[2], const char c)
-{
-    s[0] = c;
-    s[1] = '\0';
-    return s;
-}
+// // char *ctos_old(char s[2], const char c)
+// // {
+// //     s[0] = c;
+// //     s[1] = '\0';
+// //     return s;
+/// }
 int mode = 1;
 int main()
 {
        size_t *log[1000];
-       //init_graph_vga(80,25,0);
-       //putpixel(0,0,"RED");
-       //delay(10);
-       init_system();
-       
-       //get_wait_key_in("w");
        printf(">");
       
        terminal_set_colors(INPUT_TEXT_FR, INPUT_TEXT_BR);
        
-       
-       //write_serial(':');
-       
-       
-       
-       // for (int i = 1; i < 9; i++)
-       // {
-       //        write_serial_i(i);
-       // }
-       
-       //write_serial_i(12);
-       //putpixel(0,100,"4");
-       //delay(40);
        unsigned char fis;
        
        
@@ -119,47 +109,6 @@ int main()
        int off = 0;
        uint8_t byte;
        
-       
-       // print_string("Current time: ",COLOR_LIGHT_RED);
-       // get_time();
-       // print_string(" \nCurrent Calendar: ",COLOR_LIGHT_RED);
-       // get_year();
-       // print_string("\n",default_font_color);
-       // //set_int_at_video_memory(400,get_cursor(),default_font_color);
-       // // time = ctos(time, second);
-       // print_prompt(PROMPT,PROMPT_COLOR);
-       //printf("%d",45);
-       //print_string("\n",default_font_color);
-       
-       
-       // for (size_t i = 0; i < string_length(fis); i++)
-       // {
-       //       write_serial(fis[i]);
-       // }
-       
-       
-       // if(fis == 255)
-       // {
-       //        print_string("\nREADY",COLOR_MAGENTA);
-       // }
-       
-       // //print_string(time);
-       // for (int i = 0; i < 900; i++)
-       // {
-       //        char* fake = i;
-              
-       //        if(i == second-1)
-       //        {
-       //              print_string(numbers[i]);
-       //              break;
-                    
-       //        }
-              
-       // }
-
-       // write_string(1,"kernel");
-       // write_string(2,"kernel2");
-       //write_serial(1);
        while(1==1)
        {
               while(byte = scan())
@@ -177,6 +126,7 @@ int main()
                      //       char sc = shiftmap[byte];
                      //       memory_copy(sc,c,string_length(sc));
                      // }
+
                      char *s;
 			s = ctos(s, c);
                       append(log,s);
@@ -192,7 +142,7 @@ int main()
                             if(strcmp(buffer,"test") == 0)
                             {
                                   
-                                  reg();
+                                 PANIC("ERROR");
                                    
                             }
                             // else if (strcmp(buffer,"go") == 0)

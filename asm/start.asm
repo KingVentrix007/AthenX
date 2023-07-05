@@ -1,4 +1,5 @@
-
+[bits 16]
+ hlt
 bits 32
 global _start
 extern kernel_early
@@ -8,6 +9,7 @@ extern gp
 global idt_load
 extern idtp
 global start_vm86_mode
+global end_vm86_mode
 global bios_interrupt
 global exit
 section .text
@@ -17,42 +19,52 @@ section .text
 	dd - (0x1BAD002 + 0x00)	; checksum
 
 _start:
+    
 	cli						; clear interrupts
 	mov esp, stack	
-    ;call start_vm86_mode	
-    call bios_interrupt	; point the stack pointer to allocate memory
-	call kernel_early		; function to be called before main
-	call main				; call external main function
-	hlt						; halt
+    call kernel_early	
+    	; function to be called before main
+	call main
+    
+    hlt
+; run:
+;     cli						; clear interrupts
+; 	mov esp, stack	
+;     call kernel_early	
+;     	; function to be called before main
+; 	call main
+    
+;     hlt
 
 
 start_vm86_mode:
-	xor eax, eax
-	mov ax, 0x00                ; The descriptor of the tss in the gdt //TODO
-	ltr ax						; load the task register
-	ret
+	mov ebp, esp               ; save stack pointer
 
+   push dword  [ebp+4]        ; ss
+   push dword  [ebp+8]        ; esp
+   pushfd                     ; eflags
+   or dword [esp], (1 << 17)  ; set VM flags
+   push dword [ebp+12]        ; cs
+   push dword  [ebp+16]       ; eip
+   iret
+
+end_vm86_mode:
+	mov ebp, esp               ; save stack pointer
+
+   push dword  [ebp+4]        ; ss
+   push dword  [ebp+8]        ; esp
+   pushfd                     ; eflags
+   or dword [esp], (0 << 17)  ; set VM flags
+   push dword [ebp+12]        ; cs
+   push dword  [ebp+16]       ; eip
+   iret
 bios_interrupt:		
     call start_vm86_mode
-    jmp $		; Function used to call an interrupt in v8086 mode
-	push ebp
-	mov ebp, esp
+    ;int 0x10
+    call end_vm86_mode
+  
 
-	mov ah, 0
-    mov al, 0x13 	; Set the function number 
-	int 0x10
-    MOV AH, 6 ; scroll up function 
-    XOR AL, AL ; clear entire screen 
-    XOR CX, CX ; upper left corner is (0,0) 
-    MOV DX, 184FH ; lower right corner is (4Fh, 18H) 
-    MOV BH, 7 ; normal video attribute 
-    INT 10H ; clear screen					; Call the bios interrupt
 
-	pop ebp
-	add esp, 4
-	call start_vm86_mode		; Restart vm8086 mode
-	add esp, 2
-	ret
 gdt_flush:
     lgdt [gp]
     mov ax, 0x10

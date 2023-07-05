@@ -30,7 +30,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.s
 
 $(OBJ_ASM)/%.o: $(START_ASM)/%.asm
 	nasm -f elf32 -o $@ $<
-
+all: HackOS.bin
 bootl:
 	(cd asm ; nasm -f elf bootloader.asm)
 	
