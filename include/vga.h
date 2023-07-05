@@ -27,7 +27,7 @@ void print_backspace();
 void display_init();
 int cursor_flash();
 void print_prompt(char *prompt,enum vga_color color);
-void putpixel(int pos_x, int pos_y, unsigned char VGA_COLOR);
+//void putpixel(int pos_x, int pos_y, unsigned char VGA_COLOR);
 void set_int_at_video_memory(unsigned int character, int offset, enum vga_color color);
 void print_int(unsigned int *string, enum vga_color color);
 

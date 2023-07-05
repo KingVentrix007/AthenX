@@ -156,9 +156,9 @@ int cursor_flash()
     set_char_at_video_memory('_',get_cursor(),default_font_color);
 }
 
-void putpixel(int pos_x, int pos_y, unsigned char VGA_COLOR)
-{
-    unsigned char* location = (unsigned char*)0xA0000 + 320 * pos_y + pos_x;
-    *location = 3;
-}
+// void putpixel(int pos_x, int pos_y, unsigned char VGA_COLOR)
+// {
+//     unsigned char* location = (unsigned char*)0xA0000 + 320 * pos_y + pos_x;
+//     *location = 3;
+// }
 
