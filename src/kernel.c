@@ -29,21 +29,11 @@ int init_system(int graph_mode)
 {      
        if(graph_mode == 1)
        {
-              vga_init();
-              draw_char('I',0,50,0,0,0);
-              draw_char(' ',0,50,8,0,0);
-              draw_char('G',0,50,16,0,0);
-              draw_char('O',0,50,24,0,0);
-              draw_char('T',0,50,32,0,0);
-              draw_char(' ',0,50,40,0,0);
-              draw_char('G',0,50,48,0,0);
-              draw_char('R',0,50,56,0,0);
-              draw_char('A',0,50,64,0,0);
-              draw_char('P',0,50,72,0,0);
-              draw_char('H',0,50,80,0,0);
-              draw_char('I',0,50,88,0,0);
-              draw_char('C',0,50,96,0,0);
-              draw_char('S',0,50,104,0,0);
+              vga_init(COLOR_BLACK);
+              // printf_graphics("Hello world!",COLOR_GREEN);
+              // printf_graphics("\n",COLOR_GREEN);
+              printf_graphics("Bye world!G",COLOR_GREEN);
+              // printf_graphics(5,COLOR_GREEN);
               //putpixel(5,5,0x00);
               // putpixel(4,6,0x04);
               // putpixel(6,4,0x00);

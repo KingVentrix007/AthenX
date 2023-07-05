@@ -2,6 +2,7 @@
 #include "../include/string.h"
 #include "../include/debug.h"
 #include "../include/def.h"
+#include "../include/graphics.h"
 size_t terminal_row;
 size_t terminal_column;
 //static uint16_t *const VGA_MEMORY = 0xb8000;
