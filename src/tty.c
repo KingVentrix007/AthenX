@@ -75,21 +75,23 @@ void terminal_putchar(char c)
     }
     else if (c == '\t')
     {
-        terminal_column += 4;
+        terminal_row = terminal_row +4*8;
         return;
     }
     else if (c == '\b')
     {
-        terminal_putentryat(' ', terminal_color, terminal_column--, terminal_row);
+        terminal_row = terminal_row -8;
+        terminal_putentryat('q', terminal_color, terminal_column, terminal_row);
         terminal_putentryat(' ', terminal_color, terminal_column, terminal_row);
         return;
     }
     terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
-    terminal_row = terminal_row +8;
-    terminal_column = terminal_column;
+    terminal_row = terminal_row + 8;
+    //terminal_column = terminal_column;
     if (++terminal_column == VGA_WIDTH)
     {
-        terminal_column = 0;
+        terminal_column = terminal_column+8;
+        terminal_row = terminal_row +8;
         if (++terminal_row == VGA_HEIGHT)
         {
             terminal_row = 0;

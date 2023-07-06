@@ -25,8 +25,9 @@ enum vga_color
     COLOR_WHITE = 15,
 };
 
-static const size_t VGA_WIDTH = 80;
-static const size_t VGA_HEIGHT = 25;
+static const size_t VGA_WIDTH = 320;
+static const size_t VGA_HEIGHT = 200;
+
 static enum vga_color default_font_color = COLOR_LIGHT_GREY;
 
 void terminal_initialize(enum vga_color font_color, enum vga_color background_color);

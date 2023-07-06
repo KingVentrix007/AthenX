@@ -184,13 +184,11 @@ int main()
                                    // append(" ",buffer);
                                    // //set_cursor(get_cursor()+1);
                                    // }
-                                   terminal_set_colors(COLOR_WHITE,COLOR_BLACK);
-                                   set_cursor(get_cursor()+1);
+                                  
                                    printf("\b");
                                    //buffer[strlen(buffer) - 1] = '\0';
                                    
-                                   set_cursor(get_cursor()-2);
-                                   terminal_set_colors(COLOR_BLACK,COLOR_WHITE);
+                                
                                    
                             }
                             // if(strlen(buffer) == 0)
