@@ -19,6 +19,7 @@
 
 int kernel_early()
 {      
+
        init_system(1);
        
 
@@ -29,12 +30,12 @@ int init_system(int graph_mode)
 {      
        if(graph_mode == 1)
        {
-              vga_init(COLOR_BLACK);
+              vga_init(COLOR_WHITE);
               // printf_graphics("Hello world!",COLOR_GREEN);
               // printf_graphics("\n",COLOR_GREEN);
               //printf_graphics("Bye world!G",COLOR_GREEN);
-              printf("hello!");
-              delay(200);
+              printf("You are in graphics mode!\n");
+              //delay(200);
               // printf_graphics(5,COLOR_GREEN);
               //putpixel(5,5,0x00);
               // putpixel(4,6,0x04);
@@ -52,7 +53,7 @@ int init_system(int graph_mode)
        
        //delay(10);
        
-       set_cursor(get_offset(0,0));
+       //set_cursor(get_offset(0,0));
        printf("GDT init\n");
        gdt_install();
        printf("IDT init\n");
@@ -70,6 +71,7 @@ int init_system(int graph_mode)
        printf("Initializing serial\n");
        init_serial(DEFAULT_COM_DEBUG_PORT);
        write_string_serial("DEBUG FROM COM1(0x3f8):\n\0",DEFAULT_COM_DEBUG_PORT);
+
        printf("Drawing terminal");
        //delay(5);
        draw_terminal();
@@ -80,22 +82,23 @@ void on_enter(char *buffer)
 {
        
               
-       cls_command_output();
-       refresh_row(0,0);
-       set_cursor(get_offset(23,0));
-       print_string("COM1: ",COLOR_MAGENTA);
-       terminal_set_colors(COLOR_MAGENTA,COLOR_BLACK);
-       set_cursor(get_offset(0,1));
-       printf("Command: ");
-       terminal_set_colors(COLOR_LIGHT_GREEN,COLOR_BLACK);
-       printf(buffer);
-       //delay(100);
+       // cls_command_output();
+       // refresh_row(0,0);
+       // set_cursor(get_offset(23,0));
+       // print_string("COM1: ",COLOR_MAGENTA);
+       // terminal_set_colors(COLOR_MAGENTA,COLOR_BLACK);
+       // set_cursor(get_offset(0,1));
+       // printf("Command: ");
+       // terminal_set_colors(COLOR_LIGHT_GREEN,COLOR_BLACK);
+       // printf(buffer);
+       printf("\n");
+       // //delay(100);
        buffer[0] = '\0';
-       terminal_set_colors(COLOR_LIGHT_GREEN,COLOR_BLACK);
-       reset_console(COLOR_LIGHT_GREEN,COLOR_BLACK);
-       //delay(10);
-       printf(">");
-       terminal_set_colors(INPUT_TEXT_FR, INPUT_TEXT_BR);
+       // terminal_set_colors(COLOR_LIGHT_GREEN,COLOR_BLACK);
+       // reset_console(COLOR_LIGHT_GREEN,COLOR_BLACK);
+       // //delay(10);
+       // printf(">");
+       // terminal_set_colors(INPUT_TEXT_FR, INPUT_TEXT_BR);
 }
 // // char *ctos_old(char s[2], const char c)
 // // {

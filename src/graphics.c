@@ -180,7 +180,7 @@ void vga_init(char *color)
 	int bpp    = 256;
 	int colum = 0;
 	int row = 0;
-    set_t(row,colum);
+    //set_t(row,colum);
 	//setup the vga struct
 	VGA_width   = (unsigned int)width;
 	VGA_height  = (unsigned int)height;
