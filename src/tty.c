@@ -71,15 +71,16 @@ void terminal_scroll()
         {
             terminal_buffer[i * VGA_WIDTH + m] = terminal_buffer[(i + 1) * VGA_WIDTH + m];
         }
-        //terminal_row--;
+        terminal_row--;
     }
     terminal_row = VGA_HEIGHT - 0;
 }
 
-void terminal_putentryat(char c, uint8_t color, int offset)
+void terminal_putentryat(char c, uint8_t color, int offset,int x ,int y)
 {
     // const size_t index = y * VGA_WIDTH + x;
     // terminal_buffer[index] = make_vgaentry(c, color);
+    draw_char(c,color,15,terminal_row,terminal_column,0);
     write_serial(c,DEFAULT_COM_DEBUG_PORT);
     unsigned char *vidmem = (unsigned char *) VIDEO_ADDRESS;
     vidmem[offset] = c;
@@ -115,11 +116,12 @@ void terminal_putchar(char c)
     }
     else if (c == '\b')
     {
-        terminal_putentryat(' ', terminal_color, get_cursor()-1);
-        terminal_putentryat(' ', terminal_color, get_cursor());
+        terminal_putentryat(' ', terminal_color, get_cursor()-1,terminal_row-1,terminal_column);
+        terminal_putentryat(' ', terminal_color, get_cursor(),terminal_row,terminal_column);
         return;
     }
-    terminal_putentryat(c, terminal_color,get_cursor());
+    terminal_putentryat(c, terminal_color,get_cursor(),terminal_row,terminal_column);
+    terminal_row = terminal_row+8;
     int offset = get_cursor();
     set_cursor(offset+2);
     if (++terminal_column == VGA_WIDTH)
@@ -137,6 +139,11 @@ void terminal_write(const char *data, size_t size)
     size_t i;
     for (i = 0; i < size; i++)
         terminal_putchar(data[i]);
+}
+void set_t(int x, int y)
+{
+    terminal_row = x;
+    terminal_column = y;
 }
 
 int putchar(int ic)

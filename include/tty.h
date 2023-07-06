@@ -37,11 +37,14 @@ int get_terminal_col(void);
 void term_putc(char c, enum vga_color char_color);
 int set_terminal_row(int row);
 int set_terminal_col(int col);
-void terminal_putentryat(char c, uint8_t color, int offset);
+void terminal_putentryat(char c, uint8_t color, int offset,int x ,int y);
 int reset_console(enum vga_color font_color, enum vga_color background_color);
 void cls_command_output();
 void def_rows();
 int refresh_row(int delay_sec,int row);
+void ftoa_sci(char *buffer, double value);
+static void ftoa_fixed(char *buffer, double value);
+void set_t(int x, int y);
 
 extern int __loglevel;
 

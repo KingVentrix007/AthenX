@@ -32,7 +32,9 @@ int init_system(int graph_mode)
               vga_init(COLOR_BLACK);
               // printf_graphics("Hello world!",COLOR_GREEN);
               // printf_graphics("\n",COLOR_GREEN);
-              printf_graphics("Bye world!G",COLOR_GREEN);
+              //printf_graphics("Bye world!G",COLOR_GREEN);
+              printf("hello!");
+              delay(200);
               // printf_graphics(5,COLOR_GREEN);
               //putpixel(5,5,0x00);
               // putpixel(4,6,0x04);
