@@ -77,7 +77,7 @@ changlog:
 	./update_changelog
 run:
 	make iso
-	qemu-system-x86_64 -cdrom HackOS.iso -serial file:"serial.log"
+	qemu-system-x86_64 -cdrom HackOS.iso -serial file:"serial.log" -vga std -device sb16
 run-c:
 	make iso
 	qemu-system-x86_64 HackOS.iso -drive file=HDD.img -serial stdio

@@ -2,6 +2,7 @@
 #include "../include/time.h"
 #include "../include/string.h"
 #include "../include/vga.h"
+#include "../include/graphics.h"
 enum {
       cmos_address = 0x70,
       cmos_data    = 0x71
@@ -59,7 +60,7 @@ char* get_time()
             if(i == hour+2)
             {
                 hour = numbers[i];
-                print_string(numbers[i],COLOR_GREEN);
+                print_string(numbers[i],Default_font_color);
                 break;
                     
             }
@@ -73,7 +74,7 @@ char* get_time()
             if(i == minute+0)
             {
                 minute = numbers[i];
-                print_string(numbers[i],COLOR_GREEN);
+                print_string(numbers[i],Default_font_color);
                 break;
                     
             }
@@ -87,7 +88,7 @@ char* get_time()
             if(i == second)
             {
                 second = numbers[i];
-                print_string(numbers[i],COLOR_GREEN);
+                print_string(numbers[i],Default_font_color);
                 break;
                     
             }
@@ -159,7 +160,7 @@ void update_time()
     int old_cursor = get_cursor();
     set_cursor(0);
     //print_string
-    //terminal_set_colors(COLOR_RED,COLOR_BLACK);
+    //terminal_set_colors(COLOR_RED,Default_screen_color);
     print_string("Current time: ",COLOR_LIGHT_RED);
     get_time();
     set_cursor(old_cursor);

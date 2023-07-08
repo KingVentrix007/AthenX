@@ -7,7 +7,7 @@ uint8_t scan(void);
 void output_bytes(uint16_t port, uint8_t val);
 uint8_t inw(uint16_t port);
 void outw(uint16_t port, uint16_t data);
-
+void cli();
 
 
 

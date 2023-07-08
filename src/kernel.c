@@ -14,29 +14,47 @@
 #include "../include/irq.h"
 #include "../include/isrs.h"
 #include "../include/graphics.h"
+#include "../include/maths.h"
+#include "../include/kb.h"
+#include "../include/utils.h"
+#include "../include/sound.h"
+#include "../include/text.h"
 #include <iso646.h>
 
-
+ char key;
 int kernel_early()
 {      
 
-       init_system(1);
+       init_system();
        
 
     
 }
 
-int init_system(int graph_mode)
-{      
-       if(graph_mode == 1)
+int init_system()
+{     
+       
+       // terminal_initialize(Default_font_color,Default_screen_color);
+       // // printf("d");
+       // // printf("e");
+       // get_wait_key_in("1");
+       int graphics_mode = 1;
+
+
+       if(graphics_mode == 1)
        {
-              vga_init(COLOR_WHITE);
-              // printf_graphics("Hello world!",COLOR_GREEN);
-              // printf_graphics("\n",COLOR_GREEN);
-              //printf_graphics("Bye world!G",COLOR_GREEN);
+              vga_init(Default_screen_color);
+              // printf_graphics("Hello world!",Default_font_color);
+              // printf_graphics("\n",Default_font_color);
+              //printf_graphics("Bye world!G",Default_font_color);
               printf("You are in graphics mode!\n");
+              key = display_logo();
+
+              //VGA_clear_screen(Default_screen_color);
+              set_terminal_colum(0);
+              set_terminal_row(0);
               //delay(200);
-              // printf_graphics(5,COLOR_GREEN);
+              // printf_graphics(5,Default_font_color);
               //putpixel(5,5,0x00);
               // putpixel(4,6,0x04);
               // putpixel(6,4,0x00);
@@ -44,23 +62,23 @@ int init_system(int graph_mode)
               // putpixel(8,6,0x00);
               // putpixel(9,7,0x00);
               // putpixel(10,8,0x00);
-              //terminal_initialize(COLOR_WHITE,COLOR_BLACK);
+              //terminal_initialize(COLOR_WHITE,Default_screen_color);
        }
-       else if (graph_mode == 0)
+       else if (graphics_mode == 0)
        {
-             terminal_initialize(COLOR_WHITE,COLOR_BLACK);
+             terminal_initialize(COLOR_WHITE,Default_screen_color);
        }
        
        //delay(10);
        
        //set_cursor(get_offset(0,0));
-       printf("GDT init\n");
+       //printf("GDT init\n");
        gdt_install();
-       printf("IDT init\n");
+       
        idt_install();
-       printf("ISRS init\n");
+       //printf("ISRS init\n");
        isrs_install();
-       printf("IRQ init\n");
+       //printf("IRQ init\n");
        irq_install();
        //keyboard_install();
        __asm__ __volatile__ ("sti");
@@ -68,13 +86,15 @@ int init_system(int graph_mode)
        //printf("Done");
        
        //delay(10);
-       printf("Initializing serial\n");
+       //printf("Initializing serial\n");
        init_serial(DEFAULT_COM_DEBUG_PORT);
        write_string_serial("DEBUG FROM COM1(0x3f8):\n\0",DEFAULT_COM_DEBUG_PORT);
 
-       printf("Drawing terminal");
+       //printf("Drawing terminal\n");
        //delay(5);
-       draw_terminal();
+      //cls_screen(COLOR_BLUE);
+      //printChar(0,0,'c');
+      //delay(1000);
 
 
 }
@@ -86,19 +106,23 @@ void on_enter(char *buffer)
        // refresh_row(0,0);
        // set_cursor(get_offset(23,0));
        // print_string("COM1: ",COLOR_MAGENTA);
-       // terminal_set_colors(COLOR_MAGENTA,COLOR_BLACK);
+       // 
+       
        // set_cursor(get_offset(0,1));
        // printf("Command: ");
-       // terminal_set_colors(COLOR_LIGHT_GREEN,COLOR_BLACK);
+       // 
+       
        // printf(buffer);
        printf("\n");
        // //delay(100);
        buffer[0] = '\0';
-       // terminal_set_colors(COLOR_LIGHT_GREEN,COLOR_BLACK);
-       // reset_console(COLOR_LIGHT_GREEN,COLOR_BLACK);
+       // 
+      
+       // reset_console(COLOR_LIGHT_GREEN,Default_screen_color);
        // //delay(10);
-       // printf(">");
-       // terminal_set_colors(INPUT_TEXT_FR, INPUT_TEXT_BR);
+       printf(">");
+       // 
+       
 }
 // // char *ctos_old(char s[2], const char c)
 // // {
@@ -108,11 +132,17 @@ void on_enter(char *buffer)
 /// }
 int mode = 1;
 int main()
-{
+{      
+       if(strcmp(key,"h") == 0)
+       {
+              help("boot");
+       }
+       int counter_go = 0;
        size_t *log[1000];
        printf(">");
       
-       terminal_set_colors(INPUT_TEXT_FR, INPUT_TEXT_BR);
+       
+       (INPUT_TEXT_FR, INPUT_TEXT_BR);
        
        unsigned char fis;
        
@@ -146,25 +176,56 @@ int main()
 			s = ctos(s, c);
                       append(log,s);
                      if(byte == ENTER)
-                     {
-                            set_cursor(get_offset(0,4));
+                     {      
+                            //set_cursor(get_offset(0,4));
                             if(strcmp(buffer, "dump") == 0)
                             {
-                                   //terminal_set_colors(COLOR_MAGENTA,COLOR_LIGHT_GREY);
+                                   //
+                                   (COLOR_MAGENTA,COLOR_LIGHT_GREY);
                                    //printf("F\n");
-                                  cmp_reg(reg_old);
+                                   set_font_mode("small");
+                                   cls_screen(Default_screen_color);
+                                   cmp_reg(reg_old);
+                                   set_font_mode("normal");
                             }
-                            if(strcmp(buffer,"test") == 0)
+                            else if(strcmp(buffer,"test") == 0)
                             {
+                                   printf("Sound");
+                                   play_sound(58584);
+                                   beep();
                                   
-                                 PANIC("ERROR");
+                                 
+                                 //printf("█");
                                    
                             }
-                            // else if (strcmp(buffer,"go") == 0)
-                            // {
-                                    
-                                    
-                            // }
+                            else if(strcmp(buffer,"rand") == 0)
+                            {
+                                  
+                                 cls_screen(Default_screen_color);
+                                 draw_rand_img();
+                                 
+                                   
+                            }
+                            else if (strcmp(buffer,"text") == 0)
+                            {
+                                   VGA_clear_screen(Default_screen_color);
+                                   text_editor();
+                            }
+
+
+
+                            else
+                            {
+
+                                   //set_terminal_row(get_terminal_row()+20);
+                                   //printf_graphics(buffer,COLOR_RED);
+                                   terminal_set_colors(COLOR_LIGHT_RED,COLOR_BLACK);
+                                   printf("\n%s is not a reconsigned command",buffer);
+                                   terminal_set_colors(Default_font_color,COLOR_BLACK);
+                            }
+                            
+                            
+                                
                             
                            
                             on_enter(buffer);
@@ -178,63 +239,49 @@ int main()
                             //
                             if(backspace(buffer))
                             {
-                                   // if(strlen(buffer) == 0)
-                                   // {
-                                   // printf(" ");
-                                   // append(" ",buffer);
-                                   // //set_cursor(get_cursor()+1);
-                                   // }
                                   
                                    printf("\b");
-                                   //buffer[strlen(buffer) - 1] = '\0';
+                                   
                                    
                                 
                                    
                             }
-                            // if(strlen(buffer) == 0)
-                            // {
-                            //        printf("");
-                            //        append(buffer," ");
-                            //        //set_cursor(get_cursor()+1);
-                            // }
-                            
+                       
 
                      }
                      else if (byte >= 60 && byte <=79)
                      {
-                            //int byt = (char)(byte);
-                            //printf("%c",byt);
+                            
+                            printf("%d",byte);
 
                      }
                     
                      
                      else{
-                            append(buffer,c);
-                            //printf("\n");
-                            // if(strcmp(s,"-") == 0)
-                            // {
-                            //        terminal_set_colors(COLOR_LIGHT_GREY,COLOR_BLACK);
-                            // }
-                            // else if(strcmp(s," ") == 0)
-                            // {
-                                   
-                            //        terminal_set_colors(COLOR_LIGHT_GREEN,COLOR_BLACK);
-                                   
-                            // }
-                            terminal_set_colors(COLOR_BLACK,COLOR_WHITE);
-                            printf(s);
+                            
+                           
+                            
+                          
+                            if(counter_go != 0)
+                            {
+                                   append(buffer,c);
+                                   printf(s);
+                            }
+                            else
+                            {
+                                   counter_go = counter_go +1;
+                            }
+                            
                      }
                     
                      
                      
                      
               }
-              // //int sec = get_second();
-              // //cursor_flash();
+             
               int old_cursor = get_cursor();
               set_cursor(0);
-              //print_string
-              //terminal_set_colors(COLOR_RED,COLOR_BLACK);
+            
               print_string("Current time: ",COLOR_LIGHT_RED);
               get_time();
               set_cursor(old_cursor);

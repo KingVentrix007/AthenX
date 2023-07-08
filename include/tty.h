@@ -4,7 +4,7 @@
 #include "stdint.h"
 #include "stddef.h"
 #include "stdarg.h"
-
+#include "../include/graphics.h"
 enum vga_color
 {
     COLOR_BLACK = 0,
@@ -28,7 +28,7 @@ enum vga_color
 static const size_t VGA_WIDTH = 320;
 static const size_t VGA_HEIGHT = 200;
 
-static enum vga_color default_font_color = COLOR_LIGHT_GREY;
+static enum vga_color default_font_color = Default_font_color;
 
 void terminal_initialize(enum vga_color font_color, enum vga_color background_color);
 void terminal_set_colors(enum vga_color font_color, enum vga_color background_color);
@@ -38,7 +38,9 @@ int get_terminal_col(void);
 void term_putc(char c, enum vga_color char_color);
 enum vga_color change_font_color();
 void change_background_color();
-
+void cls_screen(char *color);
+int set_terminal_row(int row);
+int set_terminal_colum(int col);
 extern int __loglevel;
 
 /*

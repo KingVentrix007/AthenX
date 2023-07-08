@@ -5,6 +5,7 @@
 #include "../include/irq.h"
 #include "../include/isrs.h"
 #include "../include/string.h"
+#include "../include/keyboardmap.h"
 unsigned char kbdus[128] =
 {
     0,  27, '1', '2', '3', '4', '5', '6', '7', '8',	/* 9 */
@@ -45,8 +46,8 @@ unsigned char kbdus[128] =
     0,	/* All other keys are undefined */
 };
 
-
-void keyboard_handler()
+ char *buffer[512];;
+void console_handler()
 {
     unsigned char scancode;
 
@@ -57,7 +58,7 @@ void keyboard_handler()
     *  set, that means that a key has just been released */
     if (scancode & 0x80)
     {
-        printf("%d",scancode);
+        //printf("%d",scancode);
         /* You can use this one to see if the user released the
         *  shift, alt, or control keys... */
     }
@@ -77,25 +78,72 @@ void keyboard_handler()
         *  held. If shift is held using the larger lookup table,
         *  you would add 128 to the scancode when you look for it */
         
-       
-        // // read_char1 = read_char1 & 0x7f;
-        // char character = kbdus[scancode];
+       if(scancode == 14)
+       {
+          //printf("b");
+          if(backspace(buffer) == true)
+          {
+            printf("b");
+            printf("\b");
+          }
+       }
+       else if (scancode == 28)
+       {
+          printf("\n");
+          printf(&buffer[strlen(buffer)]);
+       }
+       else
+       {
+           char character = kbdus[scancode];
         
-        // char *decode;
-		    // decode = ctos(decode, character);
-        // //memory_copy(decode, buffer,strlen(decode));
-        // printf(decode);
+            char *decode;
+            decode = ctos(decode, character);
+            //append(&buffer,decode);
+            strcpy(&buffer[strlen(buffer)], decode);
+            printf(decode);
+            //printf("%d",scancode);
+       }
+        // // read_char1 = read_char1 & 0x7f;
+     
     }
 }
 
 void keyboard_install()
 {
-    irq_install_handler(1, keyboard_handler);
+    irq_install_handler(1, console_handler);
 }
+char* wait_for_any_key()
+{
+  char* keys[24] = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","p","q","r","t","s","u","v","w","x","y","z"};
+  int run = 0;
+  while(run==0)
+    {
+       
+        unsigned char scancode;
+        scancode = input_bytes(0x60);
 
+        char character = kbdus[scancode];
+        
+        char *decode;
+		    decode = ctos(decode, character);
+        for (size_t i = 0; i < 24; i++)
+        {
+          if(strcmp(decode,keys[i]) == 0)
+          {
+            run = 1;
+            return decode;
+            break;
+          }
+        }
+        
+
+    }
+
+}
 char get_wait_key_in(char* wait_for)
 {
     //printf(wait_for);
+  
     while(1==1)
     {
         unsigned char scancode;
@@ -105,6 +153,13 @@ char get_wait_key_in(char* wait_for)
         
         char *decode;
 		    decode = ctos(decode, character);
+        if(strcmp(wait_for,"ENTER") == 0)
+        {
+          if(scancode == ENTER)
+          {
+            break;
+          }
+        }
         if(strcmp(decode,wait_for) == 0)
         {
           break;

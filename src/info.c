@@ -2,7 +2,7 @@
 #include "../include/info.h"
 #include "../include/string.h"
 #include "../include/tty.h"
-char *log;
+char *log_function;
 
 void write_info(char c)
 {
@@ -12,9 +12,9 @@ void write_info(char c)
 
 void log_info(char*c)
 {
-    append(log,c);
+    append(log_function,c);
 }
 void dump_log()
 {
-    printf(log);
+    printf(log_function);
 }

@@ -4,6 +4,11 @@
 #include "../include/string.h"
 #include "../include/time.h"
 #include "../include/fonts.h"
+#include "../include/maths.h"
+#include <font.h>
+#include "../include/logos.h"
+static u8 __bios_font_data[FONTS_MAX_CHARS*16];
+static u8 __have_bios_data = 0;
 #define VGA_AC_INDEX 0x3C0
 #define VGA_AC_WRITE 0x3C0
 #define VGA_AC_READ 0x3C1
@@ -196,27 +201,37 @@ void vga_init(char *color)
 	VGA_clear_screen(color);
 	//_kill();
 }
-
+char* font_mode = "normal";
 void draw_char(unsigned char c,int fgcolor, int bgcolor, int x, int y, int base_address){
-  char *bitmap = arr_8x8_font;
-  int x_char,y_char;
-	static unsigned mask[] = {
-        1u << 0u, //            1
-        1u << 1u, //            2
-        1u << 2u, //            4
-        1u << 3u, //            8
-        1u << 4u, //           16
-        1u << 5u, //           32
-        1u << 6u, //           64
-        1u << 7u, //          128
-        1u << 8u, //          256
-    };
-	unsigned char *gylph=bitmap+(int)c*8;
-	for(y_char=0;y_char<8;++y_char){
-		for(x_char=0;x_char<8;++x_char){
-			plot_pixel(x+(8-x_char),y+y_char,base_address,gylph[y_char]&mask[x_char]?fgcolor:bgcolor);
+	if(strcmp(font_mode,"normal")==0)
+	{
+		char *bitmap = arr_8x8_font;
+		int x_char,y_char;
+		static unsigned mask[] = {
+			1u << 0u, //            1
+			1u << 1u, //            2
+			1u << 2u, //            4
+			1u << 3u, //            8
+			1u << 4u, //           16
+			1u << 5u, //           32
+			1u << 6u, //           64
+			1u << 7u, //          128
+			1u << 8u, //          256
+		};
+		unsigned char *gylph=bitmap+(int)c*8;
+		for(y_char=0;y_char<8;++y_char){
+			for(x_char=0;x_char<8;++x_char){
+				plot_pixel(x+(8-x_char),y+y_char,base_address,gylph[y_char]&mask[x_char]?fgcolor:bgcolor);
+			}
 		}
+
 	}
+	else if (strcmp(font_mode,"small") == 0)
+	{
+		printChar(x,y,c);
+	}
+	
+	
 }
 
 void plot_pixel(int x, int y, int base_address, char* pixel_color){
@@ -229,7 +244,7 @@ void plot_pixel(int x, int y, int base_address, char* pixel_color){
 
 void putchar_graphics_mode(char * c,int x, int y, char* color)
 {
-	draw_char(c,color,COLOR_BLACK,x,y,0);
+	draw_char(c,color,Default_screen_color,x,y,0);
 }
 
 void print(char *c,char*color)
@@ -260,7 +275,130 @@ void printf_graphics(char *string,char*color)
 }
 
 
-void draw_img(char *img, int star_x, int star_y,int img_h,int img_w)
+void draw_img(int img[][31], int start_x, int start_y,int img_h,int img_w)
 {
+	set_terminal_row(0);
+	set_terminal_colum(0);
+	
+	// for (int h = 0; h < img_h; h++)
+	// {
+	// 	for (int w = 0; w < img_w; w++)
+	// 	{
+	// 		putpixel(start_x+w,start_y+h,img[h][w]);
+	// 	}
+		
+	// }
+	
+}
 
+int printChar(int x, int y, char c) {
+	// Loop to "null terminator character"
+	int match = 0;
+	for (int l = 0; font[l].letter != 0; l++) {
+		if (font[l].letter == c) {
+			match = l;
+			break;
+		}
+	}
+
+	// Loop through 7 high 5 wide monochrome font
+	int maxLength = 0;
+	for (int py = 0; py < 7; py++) {
+		for (int px = 0; px < 5; px++) {
+			if (font[match].code[py][px] == '#') {
+				putpixel(x + px, y + py,Default_font_color);
+
+				// Dynamix width character spacing
+				if (px > maxLength) {
+					maxLength = px;
+				}
+			}
+		}
+	}
+
+	return maxLength;
+}
+
+
+void draw_logo(int start_x, int start_y)
+{
+	//char *logo = log_img;
+	cls_screen(COLOR_LIGHT_GREEN);
+	int img_h = 201;
+	int img_w = 320;
+	for (int h = 0; h < img_h; h++)
+	{
+		for (int w = 0; w < img_w; w++)
+		{
+			if(strcmp(logo_img[h][w],'#') == 0){
+				putpixel(start_x+w,start_y+h,Default_screen_color);
+			}
+			else
+			{
+				putpixel(start_x+w,start_y+h,Default_font_color);
+			}
+			
+		}
+		
+	}
+}
+
+void draw_rand_img()
+{
+	cls_screen(COLOR_LIGHT_GREEN);
+	int img_h = VGA_height;
+	int img_w = VGA_width;
+	for (int h = 0; h < img_h; h++)
+	{
+		for (int w = 0; w < img_w; w++)
+		{
+			char* color = small_rand();
+			
+			putpixel(w,h,color);
+		}
+		
+	}
+
+}
+
+//internal function
+
+// char draw_shape(char shape)
+// {
+
+
+// }
+
+void put_pixel(int x, int y, int pixel_size,char color)
+{
+	
+
+}
+char set_font_mode(char* mode)
+{
+	font_mode = mode;
+}
+
+char* display_logo()
+{
+	cls_screen(Default_screen_color);
+	draw_logo(0,0);
+	set_terminal_row(20);
+	set_terminal_colum(192);
+	printf("Press 'b' to boot or 'h' for help");
+	set_terminal_row(125);
+	set_terminal_colum(120);
+	printf("AthenX");
+	char* key = wait_for_any_key();
+	//get_wait_key_in("b");
+	VGA_clear_screen(Default_screen_color);
+	set_terminal_colum(30);
+	set_terminal_row(30);
+	//key = 'g';
+	//printf("g");
+	//printf(key);
+	set_terminal_colum(0);
+	set_terminal_row(0);
+	return key;
+              //delay(200);
 }

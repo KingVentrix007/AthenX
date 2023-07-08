@@ -2,6 +2,7 @@
 #define _DEBUG_H 1
 #define PORT 0x3f8
 #include "../include/serial.h"
+#include <graphics.h>
 typedef unsigned int u32;
 typedef struct {
     u32 cr3;
@@ -31,7 +32,7 @@ struct registers log_reg();
 void cmp_reg(struct registers reg_old);
 void PANIC_T(char* msg);
 #include "tty.h"
-#define PANIC(...) do {kprintf("PANIC at %s@%d (%s):", __FILE__, __LINE__, __FUNCTION__); \
+#define PANIC(...) do {cls_screen(COLOR_WHITE);kprintf("PANIC at %s@%d (%s):", __FILE__, __LINE__, __FUNCTION__); \
                      kprintf(__VA_ARGS__);kprintf("\n"); reg();\
                      } while(0);
 #endif

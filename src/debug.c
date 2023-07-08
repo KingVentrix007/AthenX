@@ -78,18 +78,18 @@ void cmp_reg(struct registers reg_old)
     printf("Register values:");
     
     //printf("\n");
-    printf("\nEAX: %x|EAX before error: %x", eax,reg_old.eax);
+    printf("\nEAX: %x\nEAX before error: %x\n", eax,reg_old.eax);
     //printf("d\nd");
-    printf("\nEBX: %x|EBX before error: %x", ebx,reg_old.ebx);
-    printf("\nECX: %x|ECX before error: %x", ecx, reg_old.ecx);
-    printf("\nEDX: %x|EDX before error: %x", edx,reg_old.edx);
-    printf("\nESI: %x|ESI before error: %x", esi,reg_old.esi);
-    printf("\nEDI: %x|EDI before error: %x",edi,reg_old.edi);
+    printf("\nEBX: %x\nEBX before error: %x\n", ebx,reg_old.ebx);
+    printf("\nECX: %x\nECX before error: %x\n", ecx, reg_old.ecx);
+    printf("\nEDX: %x\nEDX before error: %x\n", edx,reg_old.edx);
+    printf("\nESI: %x\nESI before error: %x\n", esi,reg_old.esi);
+    printf("\nEDI: %x\nEDI before error: %x\n",edi,reg_old.edi);
 
     printf("\nStack Pointer: %x",esp);
-    printf("\tOld Stack pointer: %x",reg_old.esp);
+    printf("\nOld Stack pointer: %x",reg_old.esp);
     printf("\nStack Base Pointer: %x",ebp);
-    printf("\tOld Stack Base Pointer: %x",reg_old.ebp);
+    printf("\nOld Stack Base Pointer: %x",reg_old.ebp);
 }
 
 struct registers log_reg()

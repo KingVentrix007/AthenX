@@ -61,3 +61,7 @@ uint8_t scan(void)
         return 0;
     }
 }
+void cli()
+{
+    asm("cli");
+}

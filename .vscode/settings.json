@@ -4,6 +4,7 @@
         "iso646.h": "c",
         "errno.h": "c",
         "irq.h": "c",
-        "graphics.h": "c"
+        "graphics.h": "c",
+        "keyboardmap.h": "c"
     }
 }

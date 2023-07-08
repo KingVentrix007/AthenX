@@ -43,22 +43,30 @@ void terminal_initialize(enum vga_color font_color, enum vga_color background_co
 
 void terminal_scroll()
 {
-    int i;
-    for (i = 0; i < VGA_HEIGHT; i++)
-    {
-        int m;
-        for (m = 0; m < VGA_WIDTH; m++)
-        {
-            terminal_buffer[i * VGA_WIDTH + m] = terminal_buffer[(i + 1) * VGA_WIDTH + m];
-        }
-        terminal_row--;
-    }
-    terminal_row = VGA_HEIGHT - 1;
+    VGA_clear_screen(Default_screen_color);
+    terminal_column = 0;
+    terminal_row = 0;
+    // int i;
+    // for (i = 0; i < VGA_HEIGHT; i++)
+    // {
+    //     int m;
+    //     for (m = 0; m < VGA_WIDTH; m++)
+    //     {
+    //         terminal_buffer[i * VGA_WIDTH + m] = terminal_buffer[(i + 1) * VGA_WIDTH + m];
+    //     }
+    //     terminal_row--;
+    // }
+    // //terminal_row = VGA_HEIGHT - 1;
 }
 
 void terminal_putentryat(char c, uint8_t color, size_t x, size_t y)
 {
-    draw_char(c,color,COLOR_WHITE,y,x,0);
+    //draw_char(c,color,COLOR_WHITE,y,x,0);
+    // if(strcmp(c," ") == 0)
+    // {
+    //     //printf("HERE");
+    // }
+    draw_char(c,color,Default_screen_color,y,x,0);
     const size_t index = y * VGA_WIDTH + x;
     terminal_buffer[index] = make_vgaentry(c, color);
 }
@@ -69,7 +77,7 @@ void terminal_putchar(char c)
     {
         terminal_column = terminal_column+8;
         terminal_row = 0;
-        if (terminal_row == VGA_HEIGHT)
+        if (terminal_column == VGA_HEIGHT)
             terminal_scroll();
         return;
     }
@@ -80,24 +88,26 @@ void terminal_putchar(char c)
     }
     else if (c == '\b')
     {
-        terminal_row = terminal_row -8;
-        terminal_putentryat('q', terminal_color, terminal_column, terminal_row);
+        terminal_row = terminal_row - 8;
+       
         terminal_putentryat(' ', terminal_color, terminal_column, terminal_row);
+        terminal_putentryat(' ', terminal_color, terminal_column, terminal_row);
+         //printf(" ");
         return;
     }
-    terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
-    terminal_row = terminal_row + 8;
+    terminal_putentryat(c, default_font_color, terminal_column, terminal_row);
+    terminal_row = terminal_row +8;
     //terminal_column = terminal_column;
-    if (++terminal_column == VGA_WIDTH)
-    {
+   if(terminal_row >= VGA_WIDTH)
+   {
         terminal_column = terminal_column+8;
-        terminal_row = terminal_row +8;
-        if (++terminal_row == VGA_HEIGHT)
-        {
-            terminal_row = 0;
-        }
-    }
-    terminal_column = terminal_column -1;
+        terminal_row = 0;
+        //printf("90023");
+        //write_serial("Q",DEFAULT_COM_DEBUG_PORT);
+        
+
+   }
+    //terminal_column = terminal_column -1;
 }
 
 void terminal_write(const char *data, size_t size)
@@ -113,7 +123,12 @@ int putchar(int ic)
     terminal_write(&c, sizeof(c));
     return ic;
 }
-
+void cls_screen(char *color)
+{
+    VGA_clear_screen(color);
+    terminal_column = 0;
+    terminal_row = 0;
+}
 void term_putc(char c, enum vga_color char_color)
 {
     unsigned int i = 0; // place holder for text string position
@@ -390,10 +405,21 @@ int get_terminal_col(void)
 {
     return terminal_column;
 }
+int set_terminal_row(int row)
+{
+    terminal_row = row;
+}
+
+int set_terminal_colum(int col)
+{
+    return terminal_column = col;
+}
 
 void terminal_set_colors(enum vga_color font_color, enum vga_color background_color)
 {
     terminal_color = make_color(font_color, background_color);
+    default_font_color = font_color;
+
     // terminal_buffer = VGA_MEMORY;
     // size_t y;
     // for (y = 0; y < VGA_HEIGHT; y++)
