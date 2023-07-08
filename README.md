@@ -32,8 +32,8 @@ Feel free to modify  use parts of or just use AthenX
 If you modify Athenx and re-upload it please put a link to this repository
 
 # Thank you're
-- Thank you to Osdev Wiki for there information
+- Thank you to Osdev Wiki for there information and code examples 
 - Thank you to osdev.net for code and tutorials
-- Thank you to the creator of primus-os, is used his OS as a template
+- Thank you to the creator of primus-os, I used his OS as a template
 
-If you use it I hope you enjoy 
+If you use AthenXI hope you enjoy 
