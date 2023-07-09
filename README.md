@@ -1,4 +1,5 @@
 # AthenX
+![AthenX_IMG](https://github.com/KingVentrix007/AthenX/assets/134402045/f8b77894-e3a6-4f03-b815-25742e2f5f71)
 My cool OS
 
 Just a simple 32bit OS that I am using to learn assembly coding and c
@@ -26,6 +27,7 @@ Just a simple 32bit OS that I am using to learn assembly coding and c
 - c libraries
 - powers systems(shutdown, reboot, sleep)
 - multitasking(maybe)
+
 
 # Other 
 Feel free to modify  use parts of or just use AthenX
