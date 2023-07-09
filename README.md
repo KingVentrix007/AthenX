@@ -4,7 +4,6 @@ My cool OS
 
 Just a simple 32bit OS that I am using to learn assembly coding and c
 # Features:
-- Currently no available commands except dump witch prints out the register values and test which calls the panic function
 - It has a simple string library
 - It has a basic VGA graphic driver and a VGA text driver that is currently broken
 - It has a basic keyboard driver
